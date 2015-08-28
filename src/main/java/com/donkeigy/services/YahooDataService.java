@@ -7,7 +7,9 @@ import com.yahoo.utils.oauth.OAuthConnection;
 import com.yahoo.utils.yql.YQLQueryUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,7 +19,7 @@ import java.net.URI;
  * Created by cedric on 8/25/15.
  */
 
-@Repository("yahooDataService")
+@Service("yahooDataService")
 public class YahooDataService
 {
 
@@ -31,41 +33,39 @@ public class YahooDataService
     {
 
     }
+    public boolean isConnected()
+    {
+        return oauthConnection.connect();
+    }
 
+    public String retrieveAuthUrl()
+    {
+        return oauthConnection.retrieveAuthorizationUrl();
+    }
+
+    public boolean storeVerifierCode(String verifier)
+    {
+       return oauthConnection.retrieveAccessToken(verifier);
+    }
+
+    @PostConstruct
     public void init()
     {
         YahooApiInfo info =
-                new YahooApiInfo("dj0yJmk9MWNNeHFyMVZneFdFJmQ9WVdrOVNqVm9hSGQ2TXpZbWNHbzlNVEU0TURVM09UYzJNZy0tJnM9Y29uc3VtZXJzZWNyZXQmeD0wYQ--",
-                        "9e1bb2700b79696770c9c931b182bf12260eb4e6");
-
-
+                new YahooApiInfo("dj0yJmk9Y1hqTFRRVFBhU1pJJmQ9WVdrOU1Vb3dSRTl4TkdrbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD0yMg--",
+                        "fee9549c91e87b35d3d788378acbfdab5498babb");
 
         oauthConnection.initService(info);
-
         yqlQueryUtil.init(info);
 
 
-        String requestUrl = oauthConnection.retrieveAuthorizationUrl();
+    }
 
-        try
-        {
-            if(!oauthConnection.connect())
-            {
-                URI uri = new java.net.URI(requestUrl);
-                Desktop desktop = Desktop.getDesktop();
-                desktop.browse(uri);
+    public YahooServiceFactory getFactory() {
+        return factory;
+    }
 
-                System.out.println("Please type in verifier code:");
-                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                String verifier = br.readLine();
-                oauthConnection.retrieveAccessToken(verifier);
-            }
-
-        }
-        catch (Exception e)
-        {
-            System.out.println("Problem with getting accessing url.");
-        }
-
+    public void setFactory(YahooServiceFactory factory) {
+        this.factory = factory;
     }
 }

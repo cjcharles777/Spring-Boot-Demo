@@ -5,6 +5,35 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="application/javascript">
+        function login()
+        {
+            var win = window.open("${oAuthUrl}", "windowname1", 'width=800, height=600'); // Remove this please
+
+        }
+        function sendVerifyCode()
+        {
+
+
+            var dataFields = {  token: $("#approvalCode").val()  };//gets value by id
+
+            $.ajax({
+                url: "oauth/verify",
+                type: "POST",
+                data: JSON.stringify(dataFields),
+                contentType: "application/json",
+                success: function (data, created) {
+
+                    alert(data);
+                    //TODO: Add refresh Page
+                },
+                error: function (textStatus, errorThrown) {
+                    alert("Error: " + textStatus + " " + errorThrown);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -35,15 +64,11 @@
             </div>
         </form>
     </div>
--->
+    -->
     <div>
-    <#if leagues?size != 0 >
-        <select>
-        <#list leagues as league>
-            <option value="${league.league_key}">${league.name}</option>
-        </#list>
-        </select>
-    </#if>
+        <button onclick="login()">GET CODE</button></ br>
+        Approval code: <input type="text" name="approvalCode" id="approvalCode"><br>
+        <button onclick="sendVerifyCode()">SUBMIT</button></ br>
     </div>
 </div>
 </body>
