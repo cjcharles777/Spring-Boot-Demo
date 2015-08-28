@@ -5,6 +5,31 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="application/javascript">
+
+        function loadLeaguePlayerPool()
+        {
+
+
+            var dataFields = {  league_id: $("#leagueInFocus").val()  };//gets value by id
+
+            $.ajax({
+                url: "players/load",
+                type: "POST",
+                data: JSON.stringify(dataFields),
+                contentType: "application/json",
+                success: function (data, created) {
+
+                    alert(data);
+                    //TODO: Add refresh Page
+                },
+                error: function (textStatus, errorThrown) {
+                    alert("Error: " + textStatus + " " + errorThrown);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -38,11 +63,12 @@
 -->
     <div>
     <#if leagues?size != 0 >
-        <select>
+        <select id="leagueInFocus">
         <#list leagues as league>
             <option value="${league.league_key}">${league.name}</option>
         </#list>
         </select>
+        <button onclick="loadLeaguePlayerPool()">Load Player Pool </button></ br>
     </#if>
     </div>
 </div>
