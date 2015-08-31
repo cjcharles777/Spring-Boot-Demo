@@ -4,10 +4,13 @@
  */
 package com.donkeigy.drafttool.dao;
 
-import com.donkeigy.drafttool.objects.hibernate.PlayerPic;
+import com.donkeigy.dao.PlayerPicDAO;
+
+import com.donkeigy.objects.hibernate.PlayerPic;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+
+import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +33,7 @@ public class PlayerPicDAOImpl implements PlayerPicDAO
     
     @Transactional(readOnly = false)
     @Override
-    public void savePlayerPic(PlayerPic n) 
+    public void savePlayerPic(PlayerPic n)
     {
          hibernateTemplate.saveOrUpdate(n);
     }
@@ -38,7 +41,11 @@ public class PlayerPicDAOImpl implements PlayerPicDAO
     @Transactional(readOnly = false)
     @Override
     public void savePlayerPics(List<PlayerPic> listN) {
-         hibernateTemplate.saveOrUpdateAll(listN);
+         for (PlayerPic playerPic : listN)
+         {
+             hibernateTemplate.saveOrUpdate(playerPic);
+         }
+
     }
 
     @Override

@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.donkeigy.drafttool.dao;
+package com.donkeigy.dao;
 
-import com.donkeigy.drafttool.objects.hibernate.Player;
+
+import com.donkeigy.objects.hibernate.LeaguePlayer;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
@@ -22,9 +23,9 @@ import java.util.List;
  * @author cedric
  */
 
-@Repository("PlayersDAO")
+@Repository("LeaguePlayersDAO")
 @Transactional
-public class PlayersDAOImpl implements PlayersDAO
+public class LeaguePlayersDAOImpl implements LeaguePlayersDAO
 {
     private HibernateTemplate hibernateTemplate;
  
@@ -34,28 +35,31 @@ public class PlayersDAOImpl implements PlayersDAO
     }
     
     @Transactional(readOnly = false)
-    public void savePlayer(Player player) {
+    public void saveLeaguePlayer(LeaguePlayer player) {
         hibernateTemplate.saveOrUpdate(player);
     }
         
     @Transactional(readOnly = false)
-    public void savePlayers(List<Player> players) 
+    public void saveLeaguePlayers(List<LeaguePlayer> players) 
     {
-        hibernateTemplate.saveOrUpdateAll(players);
+        for (LeaguePlayer leaguePlayer : players)
+        {
+            hibernateTemplate.saveOrUpdate(leaguePlayer);
+        }
     }
 
     
-    public List<Player> getAllPlayers() {
-         return (List<Player>) hibernateTemplate.find("from "
-                + Player.class.getName());
+    public List<LeaguePlayer> getAllLeaguePlayers() {
+         return (List<LeaguePlayer>) hibernateTemplate.find("from "
+                + LeaguePlayer.class.getName());
     }
     
-    public List<Player> getPlayers(int firstResult, int maxResults) 
+    public List<LeaguePlayer> getLeaguePlayers(int firstResult, int maxResults) 
     {
        DetachedCriteria criteria;
-       criteria =  DetachedCriteria.forClass(Player.class);
+       criteria =  DetachedCriteria.forClass(LeaguePlayer.class);
        criteria.addOrder(Order.asc("player_id"));
-       return (List<Player>) hibernateTemplate.findByCriteria(criteria, firstResult, maxResults);
+       return (List<LeaguePlayer>) hibernateTemplate.findByCriteria(criteria, firstResult, maxResults);
       
     
 
@@ -63,10 +67,10 @@ public class PlayersDAOImpl implements PlayersDAO
 
     }
     
-    public List<Player> getPlayers(Player p)
+    public List<LeaguePlayer> getLeaguePlayers(LeaguePlayer p)
     {
-        return (List<Player>) hibernateTemplate.findByCriteria(
-        DetachedCriteria.forClass(Player.class)
+        return (List<LeaguePlayer>) hibernateTemplate.findByCriteria(
+        DetachedCriteria.forClass(LeaguePlayer.class)
                 .add(Example.create(p))
                 .createCriteria("name")
                 .add(Example.create(p.getName())));
@@ -74,17 +78,17 @@ public class PlayersDAOImpl implements PlayersDAO
     }
 
     @SuppressWarnings("unchecked")
-    public Player getPlayerById(int playerId) {
-        return hibernateTemplate.get(Player.class, playerId);
+    public LeaguePlayer getLeaguePlayerById(int playerId) {
+        return hibernateTemplate.get(LeaguePlayer.class, playerId);
     }
     
     @SuppressWarnings("unchecked")
-    public Player getPlayerbyYahooId(int yahooId)
+    public LeaguePlayer getLeaguePlayerbyYahooId(int yahooId)
     {
-        Player result = null;
+        LeaguePlayer result = null;
         
-        List<Player> tempList =  (List<Player>) hibernateTemplate.findByCriteria(
-        DetachedCriteria.forClass(Player.class)
+        List<LeaguePlayer> tempList =  (List<LeaguePlayer>) hibernateTemplate.findByCriteria(
+        DetachedCriteria.forClass(LeaguePlayer.class)
         .add(Restrictions.eq("player_id", new Integer(yahooId).toString())));
         
         if (tempList != null && tempList.size() > 0)
@@ -99,14 +103,14 @@ public class PlayersDAOImpl implements PlayersDAO
     }
     
     @Transactional(readOnly = false)
-    public void deletePlayer(Player player) {
+    public void deleteLeaguePlayer(LeaguePlayer player) {
        hibernateTemplate.delete(player);
     }
     
     @Transactional(readOnly = false)
-    public void clearPlayers() 
+    public void clearLeaguePlayers() 
     {
-       hibernateTemplate.deleteAll(hibernateTemplate.loadAll(Player.class));
+       hibernateTemplate.deleteAll(hibernateTemplate.loadAll(LeaguePlayer.class));
     }
 
 

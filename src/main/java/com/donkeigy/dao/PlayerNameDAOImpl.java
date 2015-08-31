@@ -39,8 +39,13 @@ public class PlayerNameDAOImpl implements PlayerNameDAO
 
     @Transactional(readOnly = false)
     @Override
-    public void savePlayerNames(List<PlayerName> listN) {
-         hibernateTemplate.saveOrUpdateAll(listN);
+    public void savePlayerNames(List<PlayerName> listN)
+    {
+
+        for (PlayerName playerName : listN)
+        {
+            hibernateTemplate.saveOrUpdate(playerName);
+        }
     }
 
     @Override

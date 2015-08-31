@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.donkeigy.drafttool.dao;
+package com.donkeigy.dao;
 
-import com.donkeigy.drafttool.objects.hibernate.PlayerPic;
+import com.donkeigy.objects.hibernate.PlayerPic;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

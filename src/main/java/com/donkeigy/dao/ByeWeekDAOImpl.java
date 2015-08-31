@@ -40,7 +40,10 @@ public class ByeWeekDAOImpl implements ByeWeekDAO
     @Override
     public void saveByeWeeks(List<ByeWeek> listBW) 
     {
-         hibernateTemplate.saveOrUpdateAll(listBW);
+        for (ByeWeek byeWeek : listBW)
+        {
+            hibernateTemplate.saveOrUpdate(byeWeek);
+        }
     }
 
     @Override
