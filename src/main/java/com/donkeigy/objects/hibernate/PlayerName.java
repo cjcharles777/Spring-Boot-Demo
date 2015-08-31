@@ -1,15 +1,17 @@
 package com.donkeigy.objects.hibernate;
 
+import com.yahoo.objects.players.Name;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by cedric on 8/28/15.
  */
 @Entity
 @Table(name = "PlayersName")
-public class PlayerName
+public class PlayerName extends Name implements Serializable
 {
     private Integer id;
     private String full;

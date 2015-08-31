@@ -2,22 +2,51 @@ package com.donkeigy.objects.hibernate;
 
 
 
+import com.yahoo.objects.players.Player;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * Created by cedric on 8/28/15.
  */
-public class LeaguePlayer  implements Serializable
+@Entity
+@Table(name = "Players")
+public class LeaguePlayer  extends Player implements Serializable
 {
+    @Id
+    @GeneratedValue(generator = "generator")
+    @GenericGenerator(name = "generator", strategy = "increment")
+    @Column(name = "playerid", nullable=false)
     private int id;
+
     private String leauge_id;
+
+    @Column(name = "player_key", length=20, nullable=false)
     private String player_key;
+
+    @Column(name = "player_id_yahoo", length=7, nullable=false)
     private String player_id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
     private PlayerName name;
-    private String byeWeeks;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private ByeWeek byeWeeks;
+
+    @Column(name = "display_position", length=10, nullable=false)
     private String display_position;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
     private PlayerPic headshot;
+
+    @Column(name = "image_url", length=1000, nullable=false)
     private String image_url;
+
     //private transient  List<Position> eligible_positions;
 
 
@@ -55,11 +84,11 @@ public class LeaguePlayer  implements Serializable
         this.name = name;
     }
 
-    public String getByeWeeks() {
+    public ByeWeek getByeWeeks() {
         return byeWeeks;
     }
 
-    public void setByeWeeks(String byeWeeks) {
+    public void setByeWeeks(ByeWeek byeWeeks) {
         this.byeWeeks = byeWeeks;
     }
 

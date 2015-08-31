@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "PlayerPic")
-public class PlayerPic implements Serializable
+public class PlayerPic extends com.yahoo.objects.players.PlayerPic implements Serializable
 {
 
     private Integer id;
@@ -25,7 +25,7 @@ public class PlayerPic implements Serializable
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
