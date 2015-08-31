@@ -12,13 +12,23 @@ import java.io.Serializable;
 @Table(name = "ByeWeek")
 public class ByeWeek extends com.yahoo.objects.stats.ByeWeek implements Serializable
 {
-    private Integer id;
-    private String week;
 
     @Id
     @GeneratedValue(generator = "generator")
     @GenericGenerator(name = "generator", strategy = "increment")
     @Column(name = "bye_week_id", nullable=false)
+    private Integer id;
+
+    @Column(name = "week", length=2, nullable=false)
+    private String week;
+
+
+    public ByeWeek(com.yahoo.objects.stats.ByeWeek byeWeek)
+    {
+        this.id = byeWeek.getId();
+        this.week = byeWeek.getWeek();
+    }
+
     public Integer getId() {
         return id;
     }
@@ -27,7 +37,7 @@ public class ByeWeek extends com.yahoo.objects.stats.ByeWeek implements Serializ
         this.id = id;
     }
 
-    @Column(name = "week", length=2, nullable=false)
+
     public String getWeek() {
         return week;
     }

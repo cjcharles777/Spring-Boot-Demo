@@ -19,7 +19,7 @@ public class LeaguePlayer  extends Player implements Serializable
     @GeneratedValue(generator = "generator")
     @GenericGenerator(name = "generator", strategy = "increment")
     @Column(name = "playerid", nullable=false)
-    private int id;
+    private Integer id;
 
     private String leauge_id;
 
@@ -50,11 +50,22 @@ public class LeaguePlayer  extends Player implements Serializable
     //private transient  List<Position> eligible_positions;
 
 
-    public int getId() {
+    public LeaguePlayer(Player player, String leauge_id) {
+        this.leauge_id = leauge_id;
+        this.player_key = player.getPlayer_key();
+        this.player_id = player.getPlayer_id();
+        this.name = new PlayerName(player.getName());
+        this.byeWeeks = new ByeWeek(player.getBye_weeks());
+        this.display_position = player.getDisplay_position();
+        this.headshot = new PlayerPic(player.getHeadshot());
+        this.image_url = player.getImage_url();
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

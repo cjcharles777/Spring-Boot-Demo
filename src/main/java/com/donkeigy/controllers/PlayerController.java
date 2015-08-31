@@ -1,6 +1,7 @@
 package com.donkeigy.controllers;
 
 import com.donkeigy.objects.OAuthVerifyToken;
+import com.donkeigy.objects.hibernate.LeaguePlayer;
 import com.donkeigy.services.YahooDataService;
 import com.yahoo.objects.league.League;
 import com.yahoo.objects.players.Player;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -30,10 +32,13 @@ public class PlayerController
         YahooServiceFactory factory = yahooDataService.getFactory();
         PlayerService playerService = (PlayerService)factory.getService(ServiceType.PLAYER);
         List<Player> players = playerService.retriveLeaugePlayers(request.getLeague_id());
+        List<LeaguePlayer> dbPlayers = new LinkedList<LeaguePlayer>();
         for(Player player : players)
         {
-            System.out.println(player.getName().getFull());
+
+            dbPlayers.add(new LeaguePlayer(player, request.getLeague_id()));
         }
+
 
         //leagues.add(player);
 

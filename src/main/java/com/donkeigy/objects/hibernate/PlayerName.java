@@ -13,17 +13,31 @@ import java.io.Serializable;
 @Table(name = "PlayersName")
 public class PlayerName extends Name implements Serializable
 {
-    private Integer id;
-    private String full;
-    private String first;
-    private String last;
-    private String ascii_first;
-    private String ascii_last;
-
     @Id
     @GeneratedValue(generator = "generator")
     @GenericGenerator(name = "generator", strategy = "increment")
     @Column(name = "player_name_id", nullable=false)
+    private Integer id;
+    @Column(name = "full_name", length=1000, nullable=false)
+    private String full;
+    @Column(name = "first_name", length=500, nullable=true)
+    private String first;
+    @Column(name = "last_name", length=500, nullable=true)
+    private String last;
+    @Column(name = "ascii_first_name", length=500, nullable=true)
+    private String ascii_first;
+    @Column(name = "ascii_last_name", length=500, nullable=true)
+    private String ascii_last;
+
+    public PlayerName(Name name)
+    {
+        this.full = name.getFull();
+        this.first = name.getFirst();
+        this.last = name.getLast();
+        this.ascii_first = name.getAscii_first();
+        this.ascii_last = name.getAscii_last();
+    }
+
     public Integer getId() {
         return id;
     }
@@ -32,7 +46,7 @@ public class PlayerName extends Name implements Serializable
         this.id = id;
     }
 
-    @Column(name = "full_name", length=1000, nullable=false)
+
     public String getFull() {
         return full;
     }
@@ -41,7 +55,7 @@ public class PlayerName extends Name implements Serializable
         this.full = full;
     }
 
-    @Column(name = "first_name", length=500, nullable=true)
+
     public String getFirst() {
         return first;
     }
@@ -50,7 +64,7 @@ public class PlayerName extends Name implements Serializable
         this.first = first;
     }
 
-    @Column(name = "last_name", length=500, nullable=true)
+
     public String getLast() {
         return last;
     }
@@ -59,7 +73,7 @@ public class PlayerName extends Name implements Serializable
         this.last = last;
     }
 
-    @Column(name = "ascii_first_name", length=500, nullable=true)
+
     public String getAscii_first() {
         return ascii_first;
     }
@@ -68,7 +82,7 @@ public class PlayerName extends Name implements Serializable
         this.ascii_first = ascii_first;
     }
 
-    @Column(name = "ascii_last_name", length=500, nullable=true)
+
     public String getAscii_last() {
         return ascii_last;
     }
