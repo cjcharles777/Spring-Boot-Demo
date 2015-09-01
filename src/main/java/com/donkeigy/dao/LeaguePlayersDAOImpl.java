@@ -6,7 +6,6 @@ package com.donkeigy.dao;
 
 
 import com.donkeigy.objects.hibernate.LeaguePlayer;
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
