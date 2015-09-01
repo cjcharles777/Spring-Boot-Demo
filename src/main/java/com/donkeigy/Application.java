@@ -38,13 +38,13 @@ import java.util.Properties;
 @Configuration
 @ComponentScan({"com.yahoo.objects.query", "com.yahoo.objects.oauth", "com.yahoo.utils.yql",
         "com.yahoo.utils.oauth", "com.yahoo.dao.implementation",
-        "com.yahoo.dao.interfaces", "com.yahoo.services", "com.donkeigy.services", "com.donkeigy.controllers"})
+        "com.yahoo.dao.interfaces", "com.yahoo.services", "com.donkeigy.services", "com.donkeigy.controllers", "com.donkeigy.dao", "com.donkeigy.objects.hibernate"})
 
 @EnableAutoConfiguration
 @EnableJpaRepositories(basePackages={"com.yahoo.objects.query",
                                         "com.yahoo.objects.oauth", "com.yahoo.utils.yql",
                                         "com.yahoo.utils.oauth", "com.yahoo.dao.implementation",
-                                        "com.yahoo.dao.interfaces", "com.yahoo.services"})
+                                        "com.yahoo.dao.interfaces", "com.yahoo.services", "com.donkeigy.dao", "com.donkeigy.objects.hibernate"})
 @PropertySource({ "file:src/main/resources/Config/database.properties" })
 
 public class Application extends SpringBootServletInitializer {
@@ -80,7 +80,7 @@ public class Application extends SpringBootServletInitializer {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(restDataSource());
-        sessionFactory.setPackagesToScan(new String[]{"com.yahoo.objects.query","com.yahoo.objects.oauth" });
+        sessionFactory.setPackagesToScan(new String[]{"com.yahoo.objects.query","com.yahoo.objects.oauth", "com.donkeigy.dao", "com.donkeigy.objects.hibernate" });
         sessionFactory.setHibernateProperties(hibernateProperties());
         //sessionFactory.setEntityInterceptor(this.wietHibernateInterceptor);
 

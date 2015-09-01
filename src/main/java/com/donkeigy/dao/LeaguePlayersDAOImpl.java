@@ -6,13 +6,14 @@ package com.donkeigy.dao;
 
 
 import com.donkeigy.objects.hibernate.LeaguePlayer;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,11 +70,13 @@ public class LeaguePlayersDAOImpl implements LeaguePlayersDAO
     
     public List<LeaguePlayer> getLeaguePlayers(LeaguePlayer p)
     {
-        return (List<LeaguePlayer>) hibernateTemplate.findByCriteria(
-        DetachedCriteria.forClass(LeaguePlayer.class)
-                .add(Example.create(p))
-                .createCriteria("name")
-                .add(Example.create(p.getName())));
+        DetachedCriteria exampleCriteria = DetachedCriteria.forClass(LeaguePlayer.class).add(Example.create(p));
+        if(p.getName()!= null)
+        {
+            exampleCriteria.createCriteria("name")
+                    .add(Example.create(p.getName()));
+        }
+        return (List<LeaguePlayer>) hibernateTemplate.findByCriteria(exampleCriteria);
     
     }
 
@@ -103,7 +106,8 @@ public class LeaguePlayersDAOImpl implements LeaguePlayersDAO
     }
     
     @Transactional(readOnly = false)
-    public void deleteLeaguePlayer(LeaguePlayer player) {
+    public void deleteLeaguePlayer(LeaguePlayer player)
+    {
        hibernateTemplate.delete(player);
     }
     

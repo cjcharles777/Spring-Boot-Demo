@@ -1,5 +1,7 @@
 package com.donkeigy.controllers;
 
+import com.donkeigy.dao.LeaguePlayersDAO;
+import com.donkeigy.objects.hibernate.LeaguePlayer;
 import com.donkeigy.services.YahooDataService;
 import com.yahoo.objects.league.League;
 import com.yahoo.objects.players.Player;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,8 +29,10 @@ public class IndexController
 
     @Autowired
     YahooDataService yahooDataService;
+    @Autowired
+    LeaguePlayersDAO leaguePlayersDAO;
     private List<League> leagues =new ArrayList<League>();
-
+    private List<LeaguePlayer> players =new LinkedList<LeaguePlayer>();
 
     @RequestMapping(value="/")
     public String loadHomePage(Model model)
@@ -39,7 +44,15 @@ public class IndexController
             LeagueService leagueService = (LeagueService)factory.getService(ServiceType.LEAGUE);
 
             leagues = leagueService.getUserLeagues("nfl");
+
+            if(leagues != null && leagues.size() > 0)
+            {
+                LeaguePlayer playerExample = new LeaguePlayer(leagues.get(0).getLeague_key());
+                players = leaguePlayersDAO.getLeaguePlayers(playerExample);
+            }
+
             model.addAttribute("leagues", leagues);
+            model.addAttribute("players", players);
             return "index";
         }
         else

@@ -49,6 +49,9 @@ public class LeaguePlayer  extends Player implements Serializable
 
     //private transient  List<Position> eligible_positions;
 
+    public LeaguePlayer()
+    {
+    }
 
     public LeaguePlayer(Player player, String leauge_id) {
         this.leauge_id = leauge_id;
@@ -60,6 +63,12 @@ public class LeaguePlayer  extends Player implements Serializable
         this.headshot = new PlayerPic(player.getHeadshot());
         this.image_url = player.getImage_url();
     }
+
+    public LeaguePlayer(String leauge_id) {
+        this.leauge_id = leauge_id;
+    }
+
+
 
     public Integer getId() {
         return id;

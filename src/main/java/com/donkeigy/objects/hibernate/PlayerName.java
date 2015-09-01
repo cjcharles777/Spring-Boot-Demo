@@ -29,6 +29,10 @@ public class PlayerName extends Name implements Serializable
     @Column(name = "ascii_last_name", length=500, nullable=true)
     private String ascii_last;
 
+    public PlayerName()
+    {
+    }
+
     public PlayerName(Name name)
     {
         this.full = name.getFull();

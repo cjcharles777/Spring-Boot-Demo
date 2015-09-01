@@ -23,6 +23,9 @@ public class ByeWeek extends com.yahoo.objects.stats.ByeWeek implements Serializ
     private String week;
 
 
+    public ByeWeek() {
+    }
+
     public ByeWeek(com.yahoo.objects.stats.ByeWeek byeWeek)
     {
         this.id = byeWeek.getId();

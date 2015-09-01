@@ -23,11 +23,14 @@ public class PlayerPic extends com.yahoo.objects.players.PlayerPic implements Se
     @Column(name = "pic_size",length=1000, nullable=false)
     private String size;
 
+    public PlayerPic() {
+    }
 
     public PlayerPic(com.yahoo.objects.players.PlayerPic playerPic) {
         this.url = playerPic.getUrl();
         this.size = playerPic.getSize();
     }
+
 
     public Integer getId() {
         return id;
