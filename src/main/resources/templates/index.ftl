@@ -71,6 +71,28 @@
         <button onclick="loadLeaguePlayerPool()">Load Player Pool </button></ br>
     </#if>
     </div>
+    <div>
+        <#if players?size != 0 >
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Player Name Last</th>
+                        <th>Player Name First</th>
+                        <th>Player Display Position<th>
+                    </tr>
+                </thead>
+               <tbody>
+                    <#list players as player>
+                        <tr>
+                            <#if player.name.last?exists><td>${player.name.last}</td><#else><td>N/A</td></#if>
+                            <#if player.name.first?exists><td>${player.name.first}</td><#else><td>N/A</td></#if>
+                            <td>${player.display_position}</td>
+                        </tr>
+                    </#list>
+                </tbody>
+               </table>
+        </#if>
+    </div>
 </div>
 </body>
 </html>
