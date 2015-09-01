@@ -38,7 +38,6 @@
                     {
 
                         "processing": true,
-                        "serverSide": true,
                         "ajax":
                         {
                                 url: 'players/retrieve/league/'+($("#leagueInFocus").val())+'/',
@@ -48,6 +47,7 @@
                                 [
                                     { "data": "name.first" },
                                     { "data": "name.last" },
+                                    { "data": "display_position" }
                                     { "data": "display_position" }
                                 ]
                     } );
