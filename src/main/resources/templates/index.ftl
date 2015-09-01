@@ -5,7 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet"/>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
     <script type="application/javascript">
 
         function loadLeaguePlayerPool()
@@ -29,6 +31,27 @@
                 }
             });
         }
+
+        $(document).ready(function()
+        {
+            $('#example').DataTable(
+                    {
+
+                        "processing": true,
+                        "serverSide": true,
+                        "ajax":
+                        {
+                                url: 'players/retrieve/league/'+($("#leagueInFocus").val())+'/',
+                                dataSrc: ''
+                        },
+                        "columns":
+                                [
+                                    { "data": "name.first" },
+                                    { "data": "name.last" },
+                                    { "data": "display_position" }
+                                ]
+                    } );
+        } );
     </script>
 </head>
 <body>
@@ -72,26 +95,24 @@
     </#if>
     </div>
     <div>
-        <#if players?size != 0 >
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Player Name Last</th>
-                        <th>Player Name First</th>
-                        <th>Player Display Position<th>
-                    </tr>
-                </thead>
-               <tbody>
-                    <#list players as player>
-                        <tr>
-                            <#if player.name.last?exists><td>${player.name.last}</td><#else><td>N/A</td></#if>
-                            <#if player.name.first?exists><td>${player.name.first}</td><#else><td>N/A</td></#if>
-                            <td>${player.display_position}</td>
-                        </tr>
-                    </#list>
-                </tbody>
-               </table>
-        </#if>
+
+        <table id="example" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Player Name Last</th>
+                    <th>Player Name First</th>
+                    <th>Player Display Position</th>
+                </tr>
+            </thead>
+
+            <tfoot>
+                <tr>
+                    <th>Player Name Last</th>
+                    <th>Player Name First</th>
+                    <th>Player Display Position</th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 </div>
 </body>

@@ -47,5 +47,18 @@ public class PlayerController
 
         return "redirect:/";
     }
+    @RequestMapping(value="/retrieve/league/{leagueKey}",method= RequestMethod.GET )
+    public List<LeaguePlayer> retrievePlayers(@PathVariable("leagueKey") String leagueKey)
+    {
+        LeaguePlayer playerExample = new LeaguePlayer(leagueKey);
+        return leaguePlayersDAO.getLeaguePlayers(playerExample);
+    }
 
+    @RequestMapping(value="/retrieve/league/{leagueKey}/position/{position}",method= RequestMethod.GET )
+    public List<LeaguePlayer> retrievePlayers(@PathVariable("leagueKey") String leagueKey, @PathVariable("position") String position)
+    {
+        LeaguePlayer playerExample = new LeaguePlayer(leagueKey);
+        playerExample.setDisplay_position(position);
+        return leaguePlayersDAO.getLeaguePlayers(playerExample);
+    }
 }
