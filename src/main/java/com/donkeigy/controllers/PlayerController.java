@@ -40,6 +40,12 @@ public class PlayerController
         {
             dbPlayers.add(new LeaguePlayer(player, request.getLeague_id()));
         }
+        LeaguePlayer playerExample = new LeaguePlayer(request.getLeague_id());
+        List<LeaguePlayer> oldPlayers =  leaguePlayersDAO.getLeaguePlayers(playerExample);
+        for(LeaguePlayer oldPlayer : oldPlayers)
+        {
+            leaguePlayersDAO.deleteLeaguePlayer(oldPlayer);
+        }
 
         leaguePlayersDAO.saveLeaguePlayers(dbPlayers);
 

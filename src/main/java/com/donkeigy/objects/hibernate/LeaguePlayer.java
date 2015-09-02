@@ -61,7 +61,7 @@ public class LeaguePlayer  extends Player implements Serializable
     @Column(name = "image_url", length=1000, nullable=false)
     private String image_url;
 
-    @Column(name = "editorial_team_abbr", length=100, nullable=false)
+    @Column(name = "position_type", length=100, nullable=false)
     private String position_type;
 
     @ManyToMany( cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
@@ -73,15 +73,15 @@ public class LeaguePlayer  extends Player implements Serializable
     @LazyCollection(LazyCollectionOption.FALSE)
     private transient List<PlayerPosition> eligible_player_positions;
 
-    @Column(name = "has_player_notes", length=100, nullable=false)
+    @Column(name = "has_player_notes", length=100, nullable=true)
     private String has_player_notes;
-    @Column(name = "has_recent_player_notes", length=100, nullable=false)
+    @Column(name = "has_recent_player_notes", length=100, nullable=true)
     private String has_recent_player_notes;
-    @Column(name = "status", length=100, nullable=false)
+    @Column(name = "status", length=100, nullable=true)
     private String status;
-    @Column(name = "on_disabled_list", length=100, nullable=false)
+    @Column(name = "on_disabled_list", length=100, nullable=true)
     private String on_disabled_list;
-    @Column(name = "injury_note", length=100, nullable=false)
+    @Column(name = "injury_note", length=100, nullable=true)
     private String injury_note;
 
     //private transient  List<Position> eligible_player_positions;

@@ -1,8 +1,11 @@
 package com.donkeigy.controllers;
 
 import com.donkeigy.dao.LeaguePlayersDAO;
+import com.donkeigy.objects.draft.adp.FantasyFootballADP;
+import com.donkeigy.objects.draft.players.DrafteeInfo;
 import com.donkeigy.objects.hibernate.LeaguePlayer;
 import com.donkeigy.services.YahooDataService;
+import com.donkeigy.util.MFLDataLoad;
 import com.yahoo.objects.league.League;
 import com.yahoo.objects.players.Player;
 import com.yahoo.services.LeagueService;
@@ -12,19 +15,16 @@ import com.yahoo.services.enums.ServiceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
- * Created by cedric on 8/25/15.
+ * Created by cedric on 9/2/15.
  */
 @Controller
-public class IndexController
+@RequestMapping("/draft")
+public class DraftController
 {
 
     @Autowired
@@ -33,23 +33,19 @@ public class IndexController
     LeaguePlayersDAO leaguePlayersDAO;
     private List<League> leagues =new ArrayList<League>();
 
-
     @RequestMapping(value="/")
     public String loadHomePage(Model model)
     {
+
 
         if(yahooDataService.isConnected())
         {
             YahooServiceFactory factory = yahooDataService.getFactory();
             LeagueService leagueService = (LeagueService)factory.getService(ServiceType.LEAGUE);
-
             leagues = leagueService.getUserLeagues("nfl");
-
-
-
             model.addAttribute("leagues", leagues);
 
-            return "index";
+            return "draft";
         }
         else
         {
@@ -60,14 +56,20 @@ public class IndexController
 
 
     }
-
-
-    @RequestMapping(value="/addPlayer",method= RequestMethod.POST, consumes = "application/json")
-    public String addPlayer(@ModelAttribute("player")Player player, Model model){
-
-        //leagues.add(player);
-
-        return "redirect:/";
+    @ResponseBody
+    @RequestMapping(value="/retrieve/mfl/{leagueKey}",method= RequestMethod.GET )
+    public List<DrafteeInfo> retrievePlayers(@PathVariable("leagueKey") String leagueKey)
+    {
+        List<DrafteeInfo> result = new LinkedList<>();
+        Map<String, FantasyFootballADP> averageDraftPositionMap = new HashMap<>();
+        MFLDataLoad mplDataLoad = new MFLDataLoad(leaguePlayersDAO);
+        averageDraftPositionMap.putAll(mplDataLoad.getAdpMap()); // draft Map
+        LeaguePlayer playerExample = new LeaguePlayer(leagueKey);
+        List<LeaguePlayer> leaguePlayers = leaguePlayersDAO.getLeaguePlayers(playerExample); //players list
+        for(LeaguePlayer player : leaguePlayers)
+        {
+           result.add(new DrafteeInfo(player, averageDraftPositionMap.get(player.getPlayer_id())));
+        }
+        return result;
     }
-
 }

@@ -37,15 +37,10 @@
         }
 
         var dataTable,
-        domTable,
-        htmlTable = '<table id="example"><tbody></tbody></table>';
+                domTable,
+                htmlTable = '<table id="example"><tbody></tbody></table>';
 
-        var npColumns = [
-            { mData : "col1",  sTitle : "column1" },
-            { mData : "col2",  sTitle : "column2" },
-            { mData : "col3",  sTitle : "column3" },
-            { mData : "col4",  sTitle : "column4" }
-        ];
+
 
         function updateDataTable()
         {
@@ -60,15 +55,17 @@
                         "processing": true,
                         "ajax":
                         {
-                            url: 'players/retrieve/league/'+($("#leagueInFocus").val())+'/',
+                            url: '/draft/retrieve/mfl/'+($("#leagueInFocus").val())+'/',
                             dataSrc: ''
                         },
                         "columns":
                                 [
-                                    { "data": "name.first", "title":"First Name" },
-                                    { "data": "name.last", "title": "Last Name" },
-                                    { "data": "display_position", "title": "Position" },
-                                    { "data": "editorial_team_full_name", "title":"Team" }
+                                    { "data": "player.name.first", "title":"First Name" },
+                                    { "data": "player.name.last", "title": "Last Name" },
+                                    { "data": "player.display_position", "title": "Position" },
+                                    { "data": "player.editorial_team_full_name", "title":"Team" },
+                                    { "data": "adp.adp", "title":"ADP" ,  "defaultContent": 9999.99},
+                                    { "data": "adp.precentageOfDrafts", "title":"Percentage of Drafts",  "defaultContent": -1 }
                                 ],
                         bDestroy : true
 
@@ -81,51 +78,51 @@
 </head>
 <body>
 <div class="container">
- <!--<div class="control-group">
-        <h2 class="muted">Employee</h2>
-        <form name="employee" action="addEmployee" method="post">
-            <div class="control-group">
-                <label class="control-label" for="employeeId">Employee Id</label>
-            </div>
-            <div class="controls">
-                <input type="text" name="employeeId">
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="employeeName">Employee Name</label>
-            </div>
-            <div class="controls">
-                <input type="text" name="employeeName">
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="employeePhone">Employee Phone </label>
-            </div>
+    <!--<div class="control-group">
+           <h2 class="muted">Employee</h2>
+           <form name="employee" action="addEmployee" method="post">
+               <div class="control-group">
+                   <label class="control-label" for="employeeId">Employee Id</label>
+               </div>
+               <div class="controls">
+                   <input type="text" name="employeeId">
+               </div>
+               <div class="control-group">
+                   <label class="control-label" for="employeeName">Employee Name</label>
+               </div>
+               <div class="controls">
+                   <input type="text" name="employeeName">
+               </div>
+               <div class="control-group">
+                   <label class="control-label" for="employeePhone">Employee Phone </label>
+               </div>
 
-            <div class="controls">
-                <input type="text" name="employeePhone">
-            </div>
-            <div class="controls">
-                <input type="submit" class="btn btn-primary">
-            </div>
-        </form>
-    </div>
--->
-    <div>
-    <#if leagues?size != 0 >
-        <select id="leagueInFocus">
+               <div class="controls">
+                   <input type="text" name="employeePhone">
+               </div>
+               <div class="controls">
+                   <input type="submit" class="btn btn-primary">
+               </div>
+           </form>
+       </div>
+   -->
+<div>
+<#if leagues?size != 0 >
+    <select id="leagueInFocus">
         <#list leagues as league>
             <option value="${league.league_key}">${league.name}</option>
         </#list>
-        </select>
-        <button onclick="loadLeaguePlayerPool()">Load Player Pool </button></ br>
-    </#if>
-    </div>
-    <div id="tablediv">
+    </select>
+    <button onclick="loadLeaguePlayerPool()">Load Player Pool </button></ br>
+</#if>
+</div>
+<div id="tablediv">
 
 
-    </div>
-    <table id="example">
+</div>
+<table id="example">
     <tbody></tbody>
-    </table>
+</table>
 </div>
 </body>
 </html>
