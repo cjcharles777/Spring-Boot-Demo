@@ -88,7 +88,7 @@ public class MFLDataLoad extends FFDataLoad
     private void loadADP()
     {
         adpMap = new HashMap<String, FantasyFootballADP>();
-        String result = DataRequestCaller.requestData("http://football.myfantasyleague.com/2015/export?TYPE=adp&IS_MOCK=0&IS_KEEPER=0&IS_PPR=0&JSON=1", "GET");
+        String result = DataRequestCaller.requestData("http://football.myfantasyleague.com/2015/export?TYPE=adp&IS_MOCK=0&IS_KEEPER=1&IS_PPR=0&JSON=1&FRANCHISES=10", "GET");
         Gson gson = new GsonBuilder().create();
         JsonObject jsonObject = gson.fromJson(result, JsonObject.class);
         jsonObject = jsonObject.get("adp").getAsJsonObject();

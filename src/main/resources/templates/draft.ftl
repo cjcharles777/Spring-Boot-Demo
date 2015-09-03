@@ -64,7 +64,10 @@
                                     { "data": "player.name.last", "title": "Last Name" },
                                     { "data": "player.display_position", "title": "Position" },
                                     { "data": "player.editorial_team_full_name", "title":"Team" },
+                                    { "data": "player.status", "title":"Status" },
                                     { "data": "adp.adp", "title":"ADP" ,  "defaultContent": 9999.99},
+                                    { "data": "adp.minPick", "title":"Min Pick" ,  "defaultContent": -1},
+                                    { "data": "adp.maxPick", "title":"Max Pick" ,  "defaultContent": 9999.99},
                                     { "data": "adp.precentageOfDrafts", "title":"Percentage of Drafts",  "defaultContent": -1 }
                                 ],
                         bDestroy : true
@@ -106,23 +109,36 @@
            </form>
        </div>
    -->
-<div>
-<#if leagues?size != 0 >
-    <select id="leagueInFocus">
-        <#list leagues as league>
-            <option value="${league.league_key}">${league.name}</option>
-        </#list>
-    </select>
-    <button onclick="loadLeaguePlayerPool()">Load Player Pool </button></ br>
-</#if>
-</div>
-<div id="tablediv">
+    <div>
+    <#if leagues?size != 0 >
+        <select id="leagueInFocus">
+            <#list leagues as league>
+                <option value="${league.league_key}">${league.name}</option>
+            </#list>
+        </select>
+        <button onclick="loadLeaguePlayerPool()">Load Player Pool </button></ br>
+    </#if>
+    </div>
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="adp-draft-panel">
+        <div id="tablediv">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">...</div>
+                <div role="tabpanel" class="tab-pane" id="profile">...</div>
+                <div role="tabpanel" class="tab-pane" id="messages">...</div>
+                <div role="tabpanel" class="tab-pane" id="settings">...</div>
+            </div>
+
+        </div>
+
+    </div>
 
 
+    <div role="tabpanel" class="tab-pane" id="last-years-draft-panel">...</div>
+    <div role="tabpanel" class="tab-pane" id="best-draft-potential-panel">...</div>
+    <div role="tabpanel" class="tab-pane" id="current-draft-panel">...</div>
 </div>
-<table id="example">
-    <tbody></tbody>
-</table>
+
 </div>
 </body>
 </html>
