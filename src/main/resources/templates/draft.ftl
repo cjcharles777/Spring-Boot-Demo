@@ -76,7 +76,10 @@
             domTable = document.getElementById('example');
 
         }
-
+        $('#myTabs a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        });
     </script>
 </head>
 <body>
@@ -119,25 +122,23 @@
         <button onclick="loadLeaguePlayerPool()">Load Player Pool </button></ br>
     </#if>
     </div>
-<div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="adp-draft-panel">
-        <div id="tablediv">
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="home">...</div>
-                <div role="tabpanel" class="tab-pane" id="profile">...</div>
-                <div role="tabpanel" class="tab-pane" id="messages">...</div>
-                <div role="tabpanel" class="tab-pane" id="settings">...</div>
+    <ul id="myTabs" class="nav nav-pills">
+        <li class="active"><a href="#">ADP</a></li>
+        <li><a href="#">Last Year</a></li>
+        <li><a href="#">Best Draft</a></li>
+        <li><a href="#">Current Draft</a></li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="adp-draft-panel">
+            <div id="tablediv">
+                <table id="example"><tbody></tbody></table>
             </div>
-
         </div>
-
+        <div role="tabpanel" class="tab-pane" id="last-years-draft-panel">...</div>
+        <div role="tabpanel" class="tab-pane" id="best-draft-potential-panel">...</div>
+        <div role="tabpanel" class="tab-pane" id="current-draft-panel">...</div>
     </div>
 
-
-    <div role="tabpanel" class="tab-pane" id="last-years-draft-panel">...</div>
-    <div role="tabpanel" class="tab-pane" id="best-draft-potential-panel">...</div>
-    <div role="tabpanel" class="tab-pane" id="current-draft-panel">...</div>
-</div>
 
 </div>
 </body>
