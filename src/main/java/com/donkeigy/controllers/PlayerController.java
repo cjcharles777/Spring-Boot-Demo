@@ -1,20 +1,11 @@
 package com.donkeigy.controllers;
 
-import com.donkeigy.dao.LeaguePlayersDAO;
-import com.donkeigy.objects.OAuthVerifyToken;
 import com.donkeigy.objects.hibernate.LeaguePlayer;
-import com.donkeigy.services.YahooDataService;
+import com.donkeigy.services.LeaguePlayerService;
 import com.yahoo.objects.league.League;
-import com.yahoo.objects.players.Player;
-import com.yahoo.services.LeagueService;
-import com.yahoo.services.PlayerService;
-import com.yahoo.services.YahooServiceFactory;
-import com.yahoo.services.enums.ServiceType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -25,39 +16,13 @@ import java.util.List;
 public class PlayerController
 {
     @Autowired
-    YahooDataService yahooDataService;
-    @Autowired
-    LeaguePlayersDAO leaguePlayersDAO;
+    private LeaguePlayerService leaguePlayerService;
 
-    @RequestMapping(value="/load",method= RequestMethod.POST, consumes = "application/json")
-    public String loadPlayers(@RequestBody final League request)
-    {
-        YahooServiceFactory factory = yahooDataService.getFactory();
-        PlayerService playerService = (PlayerService)factory.getService(ServiceType.PLAYER);
-        List<Player> players = playerService.retriveLeaugePlayers(request.getLeague_id());
-        List<LeaguePlayer> dbPlayers = new LinkedList<LeaguePlayer>();
-        for(Player player : players)
-        {
-            dbPlayers.add(new LeaguePlayer(player, request.getLeague_id()));
-        }
-        LeaguePlayer playerExample = new LeaguePlayer(request.getLeague_id());
-        List<LeaguePlayer> oldPlayers =  leaguePlayersDAO.getLeaguePlayers(playerExample);
-        for(LeaguePlayer oldPlayer : oldPlayers)
-        {
-            leaguePlayersDAO.deleteLeaguePlayer(oldPlayer);
-        }
-
-        leaguePlayersDAO.saveLeaguePlayers(dbPlayers);
-
-        //leagues.add(player);
-
-        return "redirect:/";
-    }
     @RequestMapping(value="/retrieve/league/{leagueKey}",method= RequestMethod.GET )
     public List<LeaguePlayer> retrievePlayers(@PathVariable("leagueKey") String leagueKey)
     {
         LeaguePlayer playerExample = new LeaguePlayer(leagueKey);
-        return leaguePlayersDAO.getLeaguePlayers(playerExample);
+        return leaguePlayerService.getLeaguePlayersbyExample(playerExample);
     }
 
     @RequestMapping(value="/retrieve/league/{leagueKey}/position/{position}",method= RequestMethod.GET )
@@ -65,6 +30,6 @@ public class PlayerController
     {
         LeaguePlayer playerExample = new LeaguePlayer(leagueKey);
         playerExample.setDisplay_position(position);
-        return leaguePlayersDAO.getLeaguePlayers(playerExample);
+        return leaguePlayerService.getLeaguePlayersbyExample(playerExample);
     }
 }

@@ -6,8 +6,10 @@ import com.donkeigy.objects.draft.players.DrafteeInfo;
 import com.donkeigy.objects.hibernate.LeaguePlayer;
 import com.donkeigy.services.YahooDataService;
 import com.donkeigy.util.MFLDataLoad;
+import com.yahoo.objects.draft.DraftResults;
 import com.yahoo.objects.league.League;
 import com.yahoo.objects.players.Player;
+import com.yahoo.services.DraftService;
 import com.yahoo.services.LeagueService;
 import com.yahoo.services.PlayerService;
 import com.yahoo.services.YahooServiceFactory;
@@ -30,8 +32,13 @@ public class DraftController
     @Autowired
     YahooDataService yahooDataService;
     @Autowired
+    com.donkeigy.services.DraftService draftService;
+    @Autowired
+    com.donkeigy.services.LeagueService leagueService;
+    @Autowired
     LeaguePlayersDAO leaguePlayersDAO;
     private List<League> leagues =new ArrayList<League>();
+    private Map<String, League> leagueKeyMap= new HashMap<>();
 
     @RequestMapping(value="/")
     public String loadHomePage(Model model)
@@ -40,9 +47,11 @@ public class DraftController
 
         if(yahooDataService.isConnected())
         {
-            YahooServiceFactory factory = yahooDataService.getFactory();
-            LeagueService leagueService = (LeagueService)factory.getService(ServiceType.LEAGUE);
-            leagues = leagueService.getUserLeagues("nfl");
+            leagues.addAll(leagueService.retrieveUserLeagues());
+            for(League league : leagues)
+            {
+                leagueKeyMap.put(league.getLeague_key(), league);
+            }
             model.addAttribute("leagues", leagues);
 
             return "draft";
@@ -71,5 +80,13 @@ public class DraftController
            result.add(new DrafteeInfo(player, averageDraftPositionMap.get(player.getPlayer_id())));
         }
         return result;
+    }
+    @ResponseBody
+    @RequestMapping(value="/retrieve/results/past/{leagueKey}",method= RequestMethod.GET )
+    public DraftResults retrieveLastYearDraft(@PathVariable("leagueKey") String leagueKey)
+    {
+        League league = leagueKeyMap.get(leagueKey);
+        return draftService.retrieveDraftResults(leagueKey);
+
     }
 }

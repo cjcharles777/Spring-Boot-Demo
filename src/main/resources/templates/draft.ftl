@@ -8,11 +8,15 @@
     <link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script type="application/javascript">
 
 
 
-        $(document).ready(function(){updateDataTable();} );
+        $(document).ready(function(){
+            $('#myTabs').tab();
+            updateDataTable();
+        } );
 
         function loadLeaguePlayerPool()
         {
@@ -21,7 +25,7 @@
             var dataFields = {  league_id: $("#leagueInFocus").val()  };//gets value by id
 
             $.ajax({
-                url: "players/load",
+                url: "data/load",
                 type: "POST",
                 data: JSON.stringify(dataFields),
                 contentType: "application/json",
@@ -38,7 +42,7 @@
 
         var dataTable,
                 domTable,
-                htmlTable = '<table id="example"><tbody></tbody></table>';
+                htmlTable = '<table id="adp-table"><tbody></tbody></table>';
 
 
 
@@ -49,7 +53,7 @@
                 $('#tablediv').append(htmlTable);
             }
 
-            $('#example').DataTable(
+            $('#adp-table').DataTable(
                     {
 
                         "processing": true,
@@ -73,13 +77,30 @@
                         bDestroy : true
 
                     } );
-            domTable = document.getElementById('example');
+            domTable = document.getElementById('adp-table');
+
+            var dataFields = {  league_id: $("#leagueInFocus").val()  };//gets value by id
+
+            $.ajax({
+                url: '/draft/retrieve/results/past/'+($("#leagueInFocus").val())+'/',
+                type: "POST",
+                data: JSON.stringify(dataFields),
+                contentType: "application/json",
+                success: function (data, created) {
+
+                    printDraftList(data);
+                    //TODO: Add refresh Page
+                },
+                error: function (textStatus, errorThrown) {
+                    alert("Error: " + textStatus + " " + errorThrown);
+                }
+            });
 
         }
-        $('#myTabs a').click(function (e) {
-            e.preventDefault()
-            $(this).tab('show')
-        });
+       function printDraftList()
+       {
+           alert("success");
+       }
     </script>
 </head>
 <body>
@@ -122,19 +143,21 @@
         <button onclick="loadLeaguePlayerPool()">Load Player Pool </button></ br>
     </#if>
     </div>
-    <ul id="myTabs" class="nav nav-pills">
-        <li class="active"><a href="#">ADP</a></li>
-        <li><a href="#">Last Year</a></li>
-        <li><a href="#">Best Draft</a></li>
-        <li><a href="#">Current Draft</a></li>
+    <ul id="myTabs" class="nav nav-tabs" data-tabs="tabs">
+        <li class="active"><a href="#adp-draft-panel" data-toggle="tab">ADP</a></li>
+        <li><a href="#last-years-draft-panel" data-toggle="tab">Last Year</a></li>
+        <li><a href="#" data-toggle="tab">Best Draft</a></li>
+        <li><a href="#" data-toggle="tab">Current Draft</a></li>
     </ul>
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="adp-draft-panel">
             <div id="tablediv">
-                <table id="example"><tbody></tbody></table>
+                <table id="adp-table"><tbody></tbody></table>
             </div>
         </div>
-        <div role="tabpanel" class="tab-pane" id="last-years-draft-panel">...</div>
+        <div role="tabpanel" class="tab-pane" id="last-years-draft-panel">
+
+        </div>
         <div role="tabpanel" class="tab-pane" id="best-draft-potential-panel">...</div>
         <div role="tabpanel" class="tab-pane" id="current-draft-panel">...</div>
     </div>
