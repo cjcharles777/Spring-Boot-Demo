@@ -83,7 +83,7 @@
 
             $.ajax({
                 url: '/draft/retrieve/results/past/'+($("#leagueInFocus").val())+'/',
-                type: "POST",
+                type: "GET",
                 data: JSON.stringify(dataFields),
                 contentType: "application/json",
                 success: function (data, created) {

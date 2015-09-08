@@ -86,7 +86,17 @@ public class DraftController
     public DraftResults retrieveLastYearDraft(@PathVariable("leagueKey") String leagueKey)
     {
         League league = leagueKeyMap.get(leagueKey);
-        return draftService.retrieveDraftResults(leagueKey);
+       String prevLeague = league.getRenew();
+        if(prevLeague != null)
+        {
+            prevLeague = prevLeague.replace("_", ".l.");
+            return draftService.retrieveDraftResults(prevLeague);
+        }
+        else
+        {
+            return new DraftResults();
+        }
+
 
     }
 }
