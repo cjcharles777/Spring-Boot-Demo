@@ -2,6 +2,7 @@ package com.donkeigy.controllers;
 
 import com.donkeigy.dao.LeaguePlayersDAO;
 import com.donkeigy.objects.draft.adp.FantasyFootballADP;
+import com.donkeigy.objects.draft.picks.EnhancedDraftPick;
 import com.donkeigy.objects.draft.players.DrafteeInfo;
 import com.donkeigy.objects.hibernate.LeaguePlayer;
 import com.donkeigy.services.YahooDataService;
@@ -83,7 +84,7 @@ public class DraftController
     }
     @ResponseBody
     @RequestMapping(value="/retrieve/results/past/{leagueKey}",method= RequestMethod.GET )
-    public DraftResults retrieveLastYearDraft(@PathVariable("leagueKey") String leagueKey)
+    public List<EnhancedDraftPick> retrieveLastYearDraft(@PathVariable("leagueKey") String leagueKey)
     {
         League league = leagueKeyMap.get(leagueKey);
        String prevLeague = league.getRenew();
@@ -94,7 +95,7 @@ public class DraftController
         }
         else
         {
-            return new DraftResults();
+            return new LinkedList<>();
         }
 
 

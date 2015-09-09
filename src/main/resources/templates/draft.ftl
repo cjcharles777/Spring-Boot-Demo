@@ -97,9 +97,36 @@
             });
 
         }
-       function printDraftList()
+       function printDraftList(json_example)
        {
-           alert("success");
+           var oldTable = document.getElementById('last-years-draft'),
+                   newTable = oldTable.cloneNode(true);
+           var tr =document.createElement('tr');
+           var round = 1;
+           for(var i = 0; i < json_example.length; i++)
+           {
+               if (json_example[i].round * 1 != round)
+               {
+                   newTable.appendChild(tr);
+                   round++;
+                   tr = document.createElement('tr');
+               }
+
+                    var td = document.createElement('td');
+                    var img = document.createElement('img');
+                    img.setAttribute('src', json_example[i].team.team_logos.team_logo.url)
+                    td.appendChild(img);
+
+                   td.appendChild(document.createTextNode(json_example[i].player.name.full));
+                   tr.appendChild(td);
+
+
+
+
+
+           }
+
+           oldTable.parentNode.replaceChild(newTable, oldTable);
        }
     </script>
 </head>
@@ -156,7 +183,7 @@
             </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="last-years-draft-panel">
-
+            <table id="last-years-draft"></table>
         </div>
         <div role="tabpanel" class="tab-pane" id="best-draft-potential-panel">...</div>
         <div role="tabpanel" class="tab-pane" id="current-draft-panel">...</div>
