@@ -65,11 +65,14 @@
                         },
                         "columns":
                                 [
+                                    { "data": "standings.rank", "title":"Rank" },
                                     { "data": "name", "title":"Team Name" },
                                     { "data": "standings.outcome_totals.wins", "title": "Wins" },
-                                    { "data": "standings.outcome_totals.losses", "title": "Position" },
+                                    { "data": "standings.outcome_totals.losses", "title": "Losses" },
                                     { "data": "standings.outcome_totals.ties", "title":"Ties" },
                                     { "data": "standings.outcome_totals.percentage", "title":"Perecentage" },
+                                    { "data": "standings.points_for", "title":"Points For" },
+                                    { "data": "standings.points_against", "title":"Points Against" }
                                 ],
                         bDestroy : true
 
