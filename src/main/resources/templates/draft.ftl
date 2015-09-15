@@ -117,7 +117,7 @@
                     img.setAttribute('src', json_example[i].team.team_logos.team_logo.url)
                     td.appendChild(img);
 
-                   td.appendChild(document.createTextNode(json_example[i].player.name.full));
+                   td.appendChild(document.createTextNode(json_example[i].player.name.full));your
                    tr.appendChild(td);
 
 

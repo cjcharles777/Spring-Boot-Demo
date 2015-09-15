@@ -60,15 +60,16 @@
                         "processing": true,
                         "ajax":
                         {
-                            url: 'players/retrieve/league/'+($("#leagueInFocus").val())+'/',
+                            url: 'team/retrieve/league/'+($("#leagueInFocus").val())+'/',
                             dataSrc: ''
                         },
                         "columns":
                                 [
-                                    { "data": "name.first", "title":"First Name" },
-                                    { "data": "name.last", "title": "Last Name" },
-                                    { "data": "display_position", "title": "Position" },
-                                    { "data": "editorial_team_full_name", "title":"Team" }
+                                    { "data": "name", "title":"Team Name" },
+                                    { "data": "standings.outcome_totals.wins", "title": "Wins" },
+                                    { "data": "standings.outcome_totals.losses", "title": "Position" },
+                                    { "data": "standings.outcome_totals.ties", "title":"Ties" },
+                                    { "data": "standings.outcome_totals.percentage", "title":"Perecentage" },
                                 ],
                         bDestroy : true
 
