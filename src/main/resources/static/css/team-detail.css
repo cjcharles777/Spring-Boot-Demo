@@ -1,0 +1,15 @@
+section#team_detail_roster_section {
+
+    margin: auto;
+    padding: 10px;
+}
+div#team_detail_roster {
+    width: 50%;
+    float: left;
+    overflow:hidden;
+}
+div#team_detail_roster_stats {
+    width: 50%;
+    float:left;
+    overflow:hidden;
+}

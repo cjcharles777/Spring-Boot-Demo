@@ -1,5 +1,7 @@
 package com.donkeigy.services;
 
+import com.yahoo.objects.team.Roster;
+import com.yahoo.objects.team.RosterStats;
 import com.yahoo.objects.team.Team;
 import com.yahoo.services.enums.ServiceType;
 import org.springframework.stereotype.Service;
@@ -26,5 +28,13 @@ public class TeamService extends BaseService
     public List<Team> retrieveLeagueTeams (String leagueKey)
     {
         return teamService.getLeagueTeams(leagueKey);
+    }
+    public Roster retrieveTeamRoster (String teamKey, int week)
+    {
+        return teamService.getTeamRoster(teamKey,week);
+    }
+    public List<RosterStats>retrieveWeeklyRosterPoints(String teamKey, int week)
+    {
+        return teamService.getWeeklyTeamRosterPoints(teamKey, week);
     }
 }

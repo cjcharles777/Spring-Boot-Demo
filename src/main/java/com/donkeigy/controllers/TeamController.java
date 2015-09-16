@@ -2,6 +2,8 @@ package com.donkeigy.controllers;
 
 import com.donkeigy.services.TeamService;
 import com.donkeigy.services.YahooDataService;
+import com.yahoo.objects.team.Roster;
+import com.yahoo.objects.team.RosterStats;
 import com.yahoo.objects.team.Team;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +30,15 @@ public class TeamController
     {
 
         return teamService.retrieveLeagueTeams(leagueKey);
+    }
+    @RequestMapping(value="/retrieve/roster/{teamKey}/{week}",method= RequestMethod.GET )
+    public Roster retrieveTeamRoster(@PathVariable("teamKey") String teamKey, @PathVariable("week") Integer week)
+    {
+        return teamService.retrieveTeamRoster(teamKey, week);
+    }
+    @RequestMapping(value="/retrieve/stats/{teamKey}/{week}",method= RequestMethod.GET )
+    public List<RosterStats> retrieveWeeklyRosterPoints(@PathVariable("teamKey") String teamKey, @PathVariable("week") Integer week)
+    {
+        return teamService.retrieveWeeklyRosterPoints(teamKey,week);
     }
 }

@@ -1,0 +1,6 @@
+#team_detail_popup {
+    transform: scale(0.8);
+}
+.popup_visible #team_detail_popup {
+    transform: scale(1);
+}
