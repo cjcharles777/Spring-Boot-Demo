@@ -2,11 +2,11 @@ package com.donkeigy.controllers;
 
 import com.donkeigy.services.LeaguePlayerService;
 import com.yahoo.objects.league.League;
+import com.yahoo.objects.team.Team;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by cedric on 9/4/15.
@@ -28,6 +28,11 @@ public class DataController
 
         return "redirect:/";
     }
+    @RequestMapping(value="/analysis/league/players/{leagueKey}",method= RequestMethod.GET )
+    public List<String[]> retrieveLeaguePlayerAnalysis(@PathVariable("leagueKey") String leagueKey)
+    {
 
+        return null;
+    }
 
 }
