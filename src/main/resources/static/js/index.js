@@ -1,6 +1,7 @@
 $(document).ready(function()
 {
-    updateDataTable();
+    updateStandingsDataTable();
+    updateTransactionsDataTable();
     initializePopups();
 
 });
@@ -28,21 +29,21 @@ function loadLeaguePlayerPool()
     });
 }
 
-var dataTable,
-    domTable,
-    htmlTable = '<table id="example"><tbody></tbody></table>';
-var table;
+var standingsDataTable,
+    standingsDomTable,
+    standingsHtmlTable = '<table id="example"><tbody></tbody></table>';
+var standingsTable;
 
 
 
-function updateDataTable()
+function updateStandingsDataTable()
 {
-    if ($.fn.DataTable.fnIsDataTable(domTable)) {
-        dataTable.fnDestroy(true);
-        $('#tablediv').append(htmlTable);
+    if ($.fn.DataTable.fnIsDataTable(standingsDomTable)) {
+        standingsDataTable.fnDestroy(true);
+        $('#tablediv').append(standingsHtmlTable);
     }
 
-    table =  $('#example').DataTable(
+    standingsTable =  $('#example').DataTable(
         {
 
             "processing": true,
@@ -59,7 +60,7 @@ function updateDataTable()
                     { "data": "standings.outcome_totals.wins", "title": "Wins" },
                     { "data": "standings.outcome_totals.losses", "title": "Losses" },
                     { "data": "standings.outcome_totals.ties", "title":"Ties" },
-                    { "data": "standings.outcome_totals.percentage", "title":"Perecentage" },
+                    { "data": "standings.outcome_totals.percentage", "title":"Percentage" },
                     { "data": "standings.points_for", "title":"Points For" },
                     { "data": "standings.points_against", "title":"Points Against" }
                 ],
@@ -74,7 +75,67 @@ function updateDataTable()
         showTeamInfoPopup();
 
     } );
-    domTable = document.getElementById('example');
+    standingsDomTable = document.getElementById('example');
+
+}
+var transactionsDataTable,
+    transactionsDomTable,
+    transactionsHtmlTable = '<table id="league-transactions-table"><tbody></tbody></table>';
+var transactionsTable;
+
+
+
+function updateTransactionsDataTable()
+{
+    if ($.fn.DataTable.fnIsDataTable(transactionsDomTable)) {
+        transactionsDataTable.fnDestroy(true);
+        $('#tablediv').append(transactionsHtmlTable);
+    }
+
+    transactionsTable =  $('#league-transactions-table').DataTable(
+        {
+
+            "processing": true,
+            "select": true,
+            "ajax":
+            {
+                url: 'data/analysis/league/transactions/'+($("#leagueInFocus").val())+'/',
+                dataSrc: ''
+            },
+            "columns":
+                [
+                    { "data": "timestamp", "title":"Time", "render" :  function ( data, type, full, meta ) {return timeConverter(data)}},
+                    { "data": "type", "title": "Type" },
+                    { "data": "status", "title":"Status" },
+                    { "data": "players", "title": "players",
+                        "render": function ( data, type, full, meta ) {
+                            var display = "";
+                            if(data != null) {
+                                for (x in data.player) {
+                                    var player = data.player[x];
+                                    display = display.concat(player.name.full + " " + player.editorial_team_abbr + " - " + player.display_position + " <br//>"
+                                        + " source : " + player.transaction_data.source_type + " destination : " + player.transaction_data.destination_team_name)+ " <br//><br//>";
+                                }
+                                return display;
+                            }
+                            else
+                            {
+                                return "No Players";
+                            }
+                    } }
+                ],
+            bDestroy : true
+
+        } );
+
+ //  <!-- $('#example tbody').on('click', 'tr', function () {
+ //       var data = table.row( this ).data();
+ //       retrieveTeamInfo(data);
+//        retrieveTeamPoints(data);
+//        showTeamInfoPopup();
+
+//    } );-->
+    transactionsDomTable = document.getElementById('example');
 
 }
 function initializePopups()
@@ -249,4 +310,17 @@ function prepareTeamBreakDownSection(teamData, pointsData)
 function drawChart(data, options, chart) {
 
     chart.draw(data, options);
+}
+
+function timeConverter(UNIX_timestamp){
+    var a = new Date(UNIX_timestamp * 1000);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var hour = a.getHours()< 10 ? '0' + a.getHours() : a.getHours();
+    var min = a.getMinutes()< 10 ? '0' + a.getMinutes() : a.getMinutes();
+    var sec = a.getSeconds()< 10 ? '0' + a.getSeconds() : a.getSeconds();
+    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+    return time;
 }

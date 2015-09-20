@@ -1,7 +1,9 @@
 package com.donkeigy.controllers;
 
 import com.donkeigy.services.LeaguePlayerService;
+import com.donkeigy.services.LeagueService;
 import com.yahoo.objects.league.League;
+import com.yahoo.objects.league.transactions.LeagueTransaction;
 import com.yahoo.objects.team.Team;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,8 @@ public class DataController
 {
     @Autowired
     private LeaguePlayerService leaguePlayerService;
+    @Autowired
+    private LeagueService leagueService;
 
     @RequestMapping(value="/load",method= RequestMethod.POST, consumes = "application/json")
     public String loadData(@RequestBody final League request)
@@ -33,6 +37,13 @@ public class DataController
     {
 
         return null;
+    }
+
+    @RequestMapping(value="/analysis/league/transactions/{leagueKey}",method= RequestMethod.GET )
+    public List<LeagueTransaction> retrieveLeagueTransactions(@PathVariable("leagueKey") String leagueKey)
+    {
+
+        return leagueService.retrieveLeagueTransactions(leagueKey);
     }
 
 }

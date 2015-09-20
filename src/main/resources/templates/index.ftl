@@ -26,7 +26,7 @@
                 <option value="${league.league_key}">${league.name}</option>
             </#list>
         </select>
-        <button onclick="updateDataTable()">Select Team </button></ br>
+        <button onclick="updateStandingsDataTable()">Select Team </button></ br>
     </#if>
 </div>
 <div class="panel-group" id="accordion">
@@ -68,7 +68,9 @@
         </div>
         <div id="transactions" class="panel-collapse collapse">
             <div class="panel-body">
-                Test Your Might.
+                <table id="league-transactions-table">
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -82,7 +84,7 @@
         </div>
         <div id="analysis" class="panel-collapse collapse">
             <div class="panel-body">
-                Test Your Might.
+               Test Your Might
             </div>
         </div>
     </div>

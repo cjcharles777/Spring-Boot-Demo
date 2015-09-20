@@ -1,6 +1,7 @@
 package com.donkeigy.services;
 
 import com.yahoo.objects.league.League;
+import com.yahoo.objects.league.transactions.LeagueTransaction;
 import com.yahoo.services.enums.ServiceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,11 @@ public class LeagueService  extends BaseService
     {
 
         return leagueService.getUserLeagues("nfl");
+    }
+
+    public List<LeagueTransaction> retrieveLeagueTransactions(String leagueId)
+    {
+        return leagueService.getLeagueTransactions(leagueId);
     }
 
     @Override
