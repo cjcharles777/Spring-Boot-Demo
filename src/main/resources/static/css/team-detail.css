@@ -3,6 +3,11 @@ section#team_detail_roster_section {
     margin: auto;
     padding: 10px;
 }
+section#team_detail_points_section {
+
+    margin: auto;
+    padding: 10px;
+}
 div#team_detail_roster {
     width: 25%;
     float: left;

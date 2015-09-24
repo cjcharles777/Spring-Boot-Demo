@@ -23,6 +23,12 @@
                 <div id="pointDonutchart" style="width: 900px; height: 500px;"></div>
                 <div id="playerDonutchart" style="width: 900px; height: 500px;"></div>
             </div>
+
+        </section>
+        <section id="team_detail_points_section">
+            <div id="team_points_details">
+                <div id="teamSeasonPtsChart" style="width: 900px; height: 500px;"></div>
+            </div>
         </section>
         <!-- Add an optional button to close the popup -->
         <button class="team_detail_popup">Close</button>

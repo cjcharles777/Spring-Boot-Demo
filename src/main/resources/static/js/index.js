@@ -20,12 +20,12 @@ function loadLeagueInfo()
 
 
     $.ajax({
-        url: "data/analysis/league/" + $("#leagueInFocus").val() +"/",
+        url: "data/league/" + $("#leagueInFocus").val() +"/",
         type: "GET",
         contentType: "application/json",
         success: function (data, created) {
 
-            alert(data);
+           // alert(data);
             currentLeague = data;
         },
         error: function (textStatus, errorThrown) {
@@ -118,8 +118,7 @@ function updateTransactionsDataTable()
                             if(data != null) {
                                 for (x in data.player) {
                                     var player = data.player[x];
-                                    display = display.concat(player.name.full + " " + player.editorial_team_abbr + " - " + player.display_position + " <br//>"
-                                        + " source : " + player.transaction_data.source_type + " destination : " + player.transaction_data.destination_team_name)+ " <br//><br//>";
+                                    display = display.concat(prepareTransactionPlayerOutput(player));
                                 }
                                 return display;
                             }
@@ -142,6 +141,29 @@ function updateTransactionsDataTable()
 //    } );-->
     transactionsDomTable = document.getElementById('example');
 
+}
+function prepareTransactionPlayerOutput(player)
+{
+    var result = "";
+    var transactionData = player.transaction_data;
+    if(transactionData.type == "drop")
+    {
+        result = result.concat("Dropped : ");
+    }
+    if(transactionData.type == "add")
+    {
+        result = result.concat("Added : ");
+    }
+    result = result.concat(player.name.full + " " + player.editorial_team_abbr + " - " + player.display_position + " <br//>");
+    if(transactionData.type == "drop")
+    {
+        result = result.concat( " source : " + player.transaction_data.source_team_name + " destination : " + player.transaction_data.destination_type + " <br//><br//>");
+    }
+    if(transactionData.type == "add")
+    {
+        result = result.concat( " source : " + player.transaction_data.source_type + " destination : " + player.transaction_data.destination_team_name + " <br//><br//>");
+    }
+    return result;
 }
 function initializePopups()
 {
@@ -226,6 +248,40 @@ function retrieveTeamPoints (teamData)
             alert("Error: " + textStatus + " " + errorThrown);
         }
     });
+    $.ajax({
+        url: "data/analysis/team/season/points/"+teamData.team_key+"/",
+        type: "GET",
+        contentType: "application/json",
+        success: function (seasonPointsData, created) {
+
+            //alert(data);
+            prepareTeamSeasonPointsSection(teamData, seasonPointsData);
+
+        },
+        error: function (textStatus, errorThrown) {
+            alert("Error: " + textStatus + " " + errorThrown);
+        }
+    });
+}
+function prepareTeamSeasonPointsSection(teamData, seasonPointsData)
+{
+    var gPointsData = new google.visualization.DataTable();
+    gPointsData.addColumn('string', 'Week');
+    gPointsData.addColumn('number', 'Actual Points');
+    gPointsData.addColumn('number', 'Projected Points');
+    for(x in seasonPointsData)
+    {
+        var week = ((x*1)+1);
+        gPointsData.addRow([ week.toString(),seasonPointsData[x].team_points.total*1, seasonPointsData[x].team_projected_points.total*1]);
+    }
+
+    var gOptions = {
+        title: 'Actual Vs Projected Points',
+        curveType: 'function',
+        legend: { position: 'bottom' }
+    };
+    var chart = new google.visualization.LineChart(document.getElementById('teamSeasonPtsChart'));
+    google.setOnLoadCallback(drawChart(gPointsData, gOptions, chart));
 }
 
 function prepareTeamPointsSection(teamData, pointsData)

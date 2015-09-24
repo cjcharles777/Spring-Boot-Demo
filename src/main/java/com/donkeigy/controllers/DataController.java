@@ -5,6 +5,8 @@ import com.donkeigy.services.LeagueService;
 import com.yahoo.objects.league.League;
 import com.yahoo.objects.league.transactions.LeagueTransaction;
 import com.yahoo.objects.team.Team;
+import com.donkeigy.services.TeamService;
+import com.yahoo.objects.team.TeamStat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,8 @@ public class DataController
     private LeaguePlayerService leaguePlayerService;
     @Autowired
     private LeagueService leagueService;
+    @Autowired
+    private TeamService teamService;
 
     @RequestMapping(value="/load",method= RequestMethod.POST, consumes = "application/json")
     public String loadData(@RequestBody final League request)
@@ -46,7 +50,13 @@ public class DataController
         return leagueService.retrieveLeagueTransactions(leagueKey);
     }
 
-    @RequestMapping(value="/analysis/league/{leagueKey}",method= RequestMethod.GET )
+    @RequestMapping(value="/analysis/team/season/points/{teamKey}",method= RequestMethod.GET )
+    public List<TeamStat> retrieveSeasonPointsForTeam(@PathVariable("teamKey") String teamKey)
+    {
+
+        return teamService.retrieveWeeklyTeamPointsForSeason(teamKey);
+    }
+    @RequestMapping(value="/league/{leagueKey}",method= RequestMethod.GET )
     public League retrieveLeagueInformation(@PathVariable("leagueKey") String leagueKey)
     {
 
