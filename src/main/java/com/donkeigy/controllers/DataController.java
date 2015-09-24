@@ -46,4 +46,11 @@ public class DataController
         return leagueService.retrieveLeagueTransactions(leagueKey);
     }
 
+    @RequestMapping(value="/analysis/league/{leagueKey}",method= RequestMethod.GET )
+    public League retrieveLeagueInformation(@PathVariable("leagueKey") String leagueKey)
+    {
+
+        return leagueService.retrieveLeague(leagueKey);
+    }
+
 }

@@ -1,27 +1,32 @@
+var currentLeague ="";
+
 $(document).ready(function()
 {
+    loadLeagueInfo();
     updateStandingsDataTable();
     updateTransactionsDataTable();
     initializePopups();
 
+
 });
+
 google.load("visualization", "1", {packages:["corechart"]});
 
-function loadLeaguePlayerPool()
+
+function loadLeagueInfo()
 {
 
 
-    var dataFields = {  league_id: $("#leagueInFocus").val()  };//gets value by id
+
 
     $.ajax({
-        url: "players/load",
-        type: "POST",
-        data: JSON.stringify(dataFields),
+        url: "data/analysis/league/" + $("#leagueInFocus").val() +"/",
+        type: "GET",
         contentType: "application/json",
         success: function (data, created) {
 
             alert(data);
-            //TODO: Add refresh Page
+            currentLeague = data;
         },
         error: function (textStatus, errorThrown) {
             alert("Error: " + textStatus + " " + errorThrown);
@@ -69,7 +74,7 @@ function updateStandingsDataTable()
         } );
 
     $('#example tbody').on('click', 'tr', function () {
-        var data = table.row( this ).data();
+        var data = standingsTable.row( this ).data();
         retrieveTeamInfo(data);
         retrieveTeamPoints(data);
         showTeamInfoPopup();
@@ -160,7 +165,7 @@ function showTeamInfoPopup()
 function retrieveTeamInfo(teamData)
 {
     $.ajax({
-        url: "team/retrieve/roster/"+teamData.team_key+"/1",
+        url: "team/retrieve/roster/"+teamData.team_key+"/"+currentLeague.current_week+"/",
         type: "GET",
         contentType: "application/json",
         success: function (rosterData, created) {
@@ -208,7 +213,7 @@ function addPlayerToRoster(player)
 function retrieveTeamPoints (teamData)
 {
     $.ajax({
-        url: "team/retrieve/stats/"+teamData.team_key+"/1",
+        url: "team/retrieve/stats/"+teamData.team_key+"/"+currentLeague.current_week+"/",
         type: "GET",
         contentType: "application/json",
         success: function (pointsData, created) {

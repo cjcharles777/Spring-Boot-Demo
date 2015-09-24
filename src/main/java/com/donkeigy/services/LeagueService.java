@@ -23,6 +23,12 @@ public class LeagueService  extends BaseService
 
         return leagueService.getUserLeagues("nfl");
     }
+    public League retrieveLeague(String leagueid)
+    {
+
+        return leagueService.getLeague(leagueid);
+    }
+
 
     public List<LeagueTransaction> retrieveLeagueTransactions(String leagueId)
     {
