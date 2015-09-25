@@ -25,6 +25,8 @@
             </div>
 
         </section>
+        <div style="clear: both"/>
+
         <section id="team_detail_points_section">
             <div id="team_points_details">
                 <div id="teamSeasonPtsChart" style="width: 900px; height: 500px;"></div>

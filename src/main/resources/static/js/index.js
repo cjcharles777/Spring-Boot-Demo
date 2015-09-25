@@ -157,11 +157,11 @@ function prepareTransactionPlayerOutput(player)
     result = result.concat(player.name.full + " " + player.editorial_team_abbr + " - " + player.display_position + " <br//>");
     if(transactionData.type == "drop")
     {
-        result = result.concat( " source : " + player.transaction_data.source_team_name + " destination : " + player.transaction_data.destination_type + " <br//><br//>");
+        result = result.concat( player.transaction_data.source_team_name +" "+ symbol_play +" "+player.transaction_data.destination_type + " <br//><br//>");
     }
     if(transactionData.type == "add")
     {
-        result = result.concat( " source : " + player.transaction_data.source_type + " destination : " + player.transaction_data.destination_team_name + " <br//><br//>");
+        result = result.concat(player.transaction_data.source_type + " "+ symbol_play +" "+ player.transaction_data.destination_team_name + " <br//><br//>");
     }
     return result;
 }

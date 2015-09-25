@@ -14,6 +14,7 @@
     <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/1.7.10/jquery.popupoverlay.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="/js/const.js"></script>
     <script src="/js/index.js"></script>
 
 </head>
