@@ -1,18 +1,26 @@
 var currentLeague ="";
+var standingsDataTable,
+    standingsDomTable,
+    standingsHtmlTable = '<table id="example"><tbody></tbody></table>';
+var standingsTable;
+
 
 $(document).ready(function()
 {
-    loadLeagueInfo();
-    updateStandingsDataTable();
-    updateTransactionsDataTable();
-    initializePopups();
 
+    initializePopups();
+    loadLeagueData();
 
 });
 
 google.load("visualization", "1", {packages:["corechart"]});
 
-
+function loadLeagueData()
+{
+    loadLeagueInfo();
+    updateStandingsDataTable();
+    updateTransactionsDataTable();
+}
 function loadLeagueInfo()
 {
 
@@ -34,19 +42,11 @@ function loadLeagueInfo()
     });
 }
 
-var standingsDataTable,
-    standingsDomTable,
-    standingsHtmlTable = '<table id="example"><tbody></tbody></table>';
-var standingsTable;
 
 
 
 function updateStandingsDataTable()
 {
-    if ($.fn.DataTable.fnIsDataTable(standingsDomTable)) {
-        standingsDataTable.fnDestroy(true);
-        $('#tablediv').append(standingsHtmlTable);
-    }
 
     standingsTable =  $('#example').DataTable(
         {
@@ -71,7 +71,8 @@ function updateStandingsDataTable()
                 ],
             bDestroy : true
 
-        } );
+        });
+
 
     $('#example tbody').on('click', 'tr', function () {
         var data = standingsTable.row( this ).data();
@@ -85,17 +86,14 @@ function updateStandingsDataTable()
 }
 var transactionsDataTable,
     transactionsDomTable,
-    transactionsHtmlTable = '<table id="league-transactions-table"><tbody></tbody></table>';
+    transactionsHtmlTable = '<table id="league-transactions-table" class="row-border"><tbody></tbody></table>';
 var transactionsTable;
 
 
 
 function updateTransactionsDataTable()
 {
-    if ($.fn.DataTable.fnIsDataTable(transactionsDomTable)) {
-        transactionsDataTable.fnDestroy(true);
-        $('#tablediv').append(transactionsHtmlTable);
-    }
+
 
     transactionsTable =  $('#league-transactions-table').DataTable(
         {
@@ -132,13 +130,7 @@ function updateTransactionsDataTable()
 
         } );
 
- //  <!-- $('#example tbody').on('click', 'tr', function () {
- //       var data = table.row( this ).data();
- //       retrieveTeamInfo(data);
-//        retrieveTeamPoints(data);
-//        showTeamInfoPopup();
 
-//    } );-->
     transactionsDomTable = document.getElementById('example');
 
 }
