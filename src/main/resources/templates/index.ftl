@@ -13,9 +13,19 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/1.7.10/jquery.popupoverlay.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.3/mustache.min.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script src="/js/const.js"></script>
     <script src="/js/index.js"></script>
+    <script id="template" type="x-tmpl-mustache">
+      {{#matchups.matchup}}
+          <div>
+               {{#teams.team}}
+                    <div> {{name}} </div>
+               {{/teams.team}}
+          </div>
+      {{/matchups.matchup}}
+    </script>
 
 </head>
 <body>
@@ -40,7 +50,8 @@
         </div>
         <div id="matchup" class="panel-collapse collapse in">
             <div class="panel-body">
-                Test Your Might.
+               <div id = "matchupBody"></div>
+               </div>
             </div>
         </div>
     </div>

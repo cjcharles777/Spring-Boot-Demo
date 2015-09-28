@@ -1,6 +1,7 @@
 package com.donkeigy.services;
 
 import com.yahoo.objects.league.League;
+import com.yahoo.objects.league.transactions.LeagueScoreboard;
 import com.yahoo.objects.league.transactions.LeagueTransaction;
 import com.yahoo.services.enums.ServiceType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,11 @@ public class LeagueService  extends BaseService
     {
         return leagueService.getLeagueTransactions(leagueId);
     }
+    public LeagueScoreboard retrieveWeeklyScoreBoard (String leagueId, Integer week)
+    {
+        return leagueService.getWeeklyScoreBoard(leagueId, week.intValue());
+    }
+
 
     @Override
     public void initService()

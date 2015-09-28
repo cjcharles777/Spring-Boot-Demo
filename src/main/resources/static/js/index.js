@@ -18,9 +18,9 @@ google.load("visualization", "1", {packages:["corechart"]});
 function loadLeagueData()
 {
     loadLeagueInfo();
-    updateStandingsDataTable();
     updateTransactionsDataTable();
 }
+
 function loadLeagueInfo()
 {
 
@@ -35,6 +35,8 @@ function loadLeagueInfo()
 
            // alert(data);
             currentLeague = data;
+            loadLeagueScoreboard();
+            updateStandingsDataTable();
         },
         error: function (textStatus, errorThrown) {
             alert("Error: " + textStatus + " " + errorThrown);
@@ -42,6 +44,26 @@ function loadLeagueInfo()
     });
 }
 
+function loadLeagueScoreboard()
+{
+    $.ajax({
+        url: "/data/league/scoreboard/" + $("#leagueInFocus").val() +"/"+currentLeague.current_week+"/",
+        type: "GET",
+        contentType: "application/json",
+        success: function (data, created) {
+
+            // alert(data);
+            //currentLeague = data;
+
+            var template = $('#template').html();
+            var html = Mustache.to_html(template, data);
+            $('#matchupBody').html(html);
+        },
+        error: function (textStatus, errorThrown) {
+            alert("Error: " + textStatus + " " + errorThrown);
+        }
+    });
+}
 
 
 

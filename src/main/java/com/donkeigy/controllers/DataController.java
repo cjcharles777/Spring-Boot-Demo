@@ -3,6 +3,7 @@ package com.donkeigy.controllers;
 import com.donkeigy.services.LeaguePlayerService;
 import com.donkeigy.services.LeagueService;
 import com.yahoo.objects.league.League;
+import com.yahoo.objects.league.transactions.LeagueScoreboard;
 import com.yahoo.objects.league.transactions.LeagueTransaction;
 import com.yahoo.objects.team.Team;
 import com.donkeigy.services.TeamService;
@@ -62,5 +63,12 @@ public class DataController
 
         return leagueService.retrieveLeague(leagueKey);
     }
+    @RequestMapping(value="/league/scoreboard/{leagueKey}/{week}",method= RequestMethod.GET )
+    public LeagueScoreboard retrieveLeagueScoreboard(@PathVariable("leagueKey") String leagueKey, @PathVariable("week") Integer week)
+    {
+
+        return leagueService.retrieveWeeklyScoreBoard(leagueKey, week);
+    }
+
 
 }
