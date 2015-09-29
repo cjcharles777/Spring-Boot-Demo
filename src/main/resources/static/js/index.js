@@ -55,8 +55,9 @@ function loadLeagueScoreboard()
             // alert(data);
             //currentLeague = data;
 
-            var template = $('#template').html();
-            var html = Mustache.to_html(template, data);
+            var source = $('#template').html();
+            var template = Handlebars.compile(source);
+            var html = template(data);
             $('#matchupBody').html(html);
         },
         error: function (textStatus, errorThrown) {

@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="/css/popup.css" />
     <link rel="stylesheet" type="text/css" href="/css/team-detail.css" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet"/>
@@ -13,17 +14,27 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/1.7.10/jquery.popupoverlay.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.3/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.min.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script src="/js/const.js"></script>
     <script src="/js/index.js"></script>
     <script id="template" type="x-tmpl-mustache">
       {{#matchups.matchup}}
-          <div>
+          <div class="matchup-wrapper">
                {{#teams.team}}
-                    <div> {{name}} </div>
+                    <div class="matchup-team inline">
+                        <div class="avatar inline-block">
+                            <img class="avatar-img" src ="{{team_logos.team_logo.url}}"/>
+                        </div>
+                        <div class="inline-block">
+                            <div>{{name}}</div>
+                            <div>{{team_points.total}}</div>
+                            <div>{{team_projected_points.total}}</div>
+                        </div>
+                    </div>
                {{/teams.team}}
           </div>
+          <br style="clear:both" />
       {{/matchups.matchup}}
     </script>
 
