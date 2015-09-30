@@ -213,22 +213,23 @@ public class AnalysisService
                 BigDecimal points = rosterStats.getPlayerPoints();
                 for(String playerPosition : rosterStats.getEligiblePositions())
                 {
-                    BigDecimal positionTotalSum;
-                    Integer count;
-                    if(!positionTotalPointsMap.containsKey(playerPosition))
+                    if(!playerPosition.equals("IR"))
                     {
-                        positionTotalSum = new BigDecimal(0);
-                        count = 0;
+                        BigDecimal positionTotalSum;
+                        Integer count;
+                        if (!positionTotalPointsMap.containsKey(playerPosition)) {
+                            positionTotalSum = new BigDecimal(0);
+                            count = 0;
+                        } else {
+                            positionTotalSum = positionTotalPointsMap.get(playerPosition);
+                            count = positionCountMap.get(playerPosition);
+                        }
+                        positionTotalSum = positionTotalSum.add(points);
+                        count++;
+                        positionTotalPointsMap.put(playerPosition, positionTotalSum);
+                        positionCountMap.put(playerPosition, count);
                     }
-                    else
-                    {
-                        positionTotalSum = positionTotalPointsMap.get(playerPosition);
-                        count = positionCountMap.get(playerPosition);
-                    }
-                    positionTotalSum = positionTotalSum.add(points);
-                    count++;
-                    positionTotalPointsMap.put(playerPosition, positionTotalSum);
-                    positionCountMap.put(playerPosition, count);
+
                 }
 
             }
