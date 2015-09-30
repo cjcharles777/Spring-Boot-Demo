@@ -400,3 +400,54 @@ function timeConverter(UNIX_timestamp){
     var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
     return time;
 }
+
+function prepareAvgPointAnalysisTable(data)
+{
+    var positions = data.availablePositonsArray;
+    var teamData = data.teamPositionAvgList;
+    var leagueData = data.positionAvgList;
+    removeA(positions, 'IR');
+    removeA(positions, 'BN');
+
+    var finalArr = [];
+    var headerArr = [];
+    headerArr.push("Position");
+    for (x in teamData)
+    {
+        headerArr.push(teamData[x].team.name);
+    }
+    headerArr.push("League");
+    finalArr.push(headerArr);
+    for (y in positions)
+    {
+
+        var position = positons[y];
+        var tempPosArr = [position];
+        for(z in teamData)
+        {
+            var matches = teamData[z].positionAvgList.filter(function(val, index, array) {
+                return val.position == position;
+            });
+            tempPosArr.push(matches[0].avg);
+        }
+        var leaugeMatches = leagueData.filter(function(val, index, array) {
+            return val.position == position;
+        });
+        tempPosArr.push(leaugeMatches);
+        finalArr.push(tempPosArr);
+    }
+    return finalArr;
+}
+
+function removeA(arr)
+{
+    var what, a = arguments, L = a.length, ax;
+    while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax= arr.indexOf(what)) !== -1) {
+            arr.splice(ax, 1);
+        }
+    }
+    return arr;
+}
+
