@@ -1,5 +1,7 @@
 package com.donkeigy.controllers;
 
+import com.donkeigy.objects.analysis.LeagueAnalysis;
+import com.donkeigy.services.AnalysisService;
 import com.donkeigy.services.LeaguePlayerService;
 import com.donkeigy.services.LeagueService;
 import com.yahoo.objects.league.League;
@@ -26,6 +28,8 @@ public class DataController
     private LeagueService leagueService;
     @Autowired
     private TeamService teamService;
+    @Autowired
+    private AnalysisService analysisService;
 
     @RequestMapping(value="/load",method= RequestMethod.POST, consumes = "application/json")
     public String loadData(@RequestBody final League request)
@@ -37,11 +41,11 @@ public class DataController
 
         return "redirect:/";
     }
-    @RequestMapping(value="/analysis/league/players/{leagueKey}",method= RequestMethod.GET )
-    public List<String[]> retrieveLeaguePlayerAnalysis(@PathVariable("leagueKey") String leagueKey)
+    @RequestMapping(value="/analysis/league/{leagueKey}",method= RequestMethod.GET )
+    public LeagueAnalysis retrieveLeagueAnalysis(@PathVariable("leagueKey") String leagueKey)
     {
 
-        return null;
+        return analysisService.retrieveLeagueAnalysis(leagueKey);
     }
 
     @RequestMapping(value="/analysis/league/transactions/{leagueKey}",method= RequestMethod.GET )
