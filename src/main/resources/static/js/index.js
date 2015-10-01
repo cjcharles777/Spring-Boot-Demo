@@ -19,6 +19,7 @@ function loadLeagueData()
 {
     loadLeagueInfo();
     updateTransactionsDataTable();
+    loadLeagueAnalysis();
 }
 
 function loadLeagueInfo()
@@ -37,6 +38,27 @@ function loadLeagueInfo()
             currentLeague = data;
             loadLeagueScoreboard();
             updateStandingsDataTable();
+        },
+        error: function (textStatus, errorThrown) {
+            alert("Error: " + textStatus + " " + errorThrown);
+        }
+    });
+}
+function loadLeagueAnalysis()
+{
+
+
+
+
+    $.ajax({
+        url: "data/analysis/league/" + $("#leagueInFocus").val() +"/",
+        type: "GET",
+        contentType: "application/json",
+        success: function (data, created) {
+
+            // alert(data);
+            createAvgPointAnalysisChart(data);
+
         },
         error: function (textStatus, errorThrown) {
             alert("Error: " + textStatus + " " + errorThrown);
@@ -400,7 +422,26 @@ function timeConverter(UNIX_timestamp){
     var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
     return time;
 }
+function createAvgPointAnalysisChart(data)
+{
+    var gAvgData = google.visualization.arrayToDataTable(prepareAvgPointAnalysisTable(data));
 
+
+    var numTeams = data.teamPositionAvgList.length ; // must be using Location
+    var seriesArray = new Array (numTeams);
+    seriesArray[numTeams] =  {type: 'line'};
+    var gOptions = {
+        title : 'Average Point Production by Position',
+        height: 500,
+        width: 900,
+        vAxis: {title: 'Average Points'},
+        hAxis: {title: 'Positions'},
+        seriesType: 'bars',
+        series: seriesArray
+    };
+    var chart = new google.visualization.ComboChart(document.getElementById('avg_points_chart_div'));
+    google.setOnLoadCallback(drawChart(gAvgData, gOptions, chart));
+}
 function prepareAvgPointAnalysisTable(data)
 {
     var positions = data.availablePositonsArray;
@@ -421,7 +462,7 @@ function prepareAvgPointAnalysisTable(data)
     for (y in positions)
     {
 
-        var position = positons[y];
+        var position = positions[y];
         var tempPosArr = [position];
         for(z in teamData)
         {
@@ -433,7 +474,7 @@ function prepareAvgPointAnalysisTable(data)
         var leaugeMatches = leagueData.filter(function(val, index, array) {
             return val.position == position;
         });
-        tempPosArr.push(leaugeMatches);
+        tempPosArr.push(leaugeMatches[0].avg);
         finalArr.push(tempPosArr);
     }
     return finalArr;

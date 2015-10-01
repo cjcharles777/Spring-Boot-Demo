@@ -107,7 +107,7 @@
         </div>
         <div id="analysis" class="panel-collapse collapse">
             <div class="panel-body">
-               Test Your Might
+                <div id="avg_points_chart_div" style="width: 900px; height: 500px;"></div>
             </div>
         </div>
     </div>

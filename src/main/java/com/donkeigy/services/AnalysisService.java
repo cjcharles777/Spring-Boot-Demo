@@ -211,26 +211,26 @@ public class AnalysisService
             for (RosterStats rosterStats : rosterStatsList)
             {
                 BigDecimal points = rosterStats.getPlayerPoints();
-                for(String playerPosition : rosterStats.getEligiblePositions())
-                {
-                    if(!playerPosition.equals("IR"))
-                    {
-                        BigDecimal positionTotalSum;
-                        Integer count;
-                        if (!positionTotalPointsMap.containsKey(playerPosition)) {
-                            positionTotalSum = new BigDecimal(0);
-                            count = 0;
-                        } else {
-                            positionTotalSum = positionTotalPointsMap.get(playerPosition);
-                            count = positionCountMap.get(playerPosition);
-                        }
-                        positionTotalSum = positionTotalSum.add(points);
-                        count++;
-                        positionTotalPointsMap.put(playerPosition, positionTotalSum);
-                        positionCountMap.put(playerPosition, count);
-                    }
+                String playerPosition = rosterStats.getSelectedPosition();
 
+                if(!playerPosition.equals("IR"))
+                {
+                    BigDecimal positionTotalSum;
+                    Integer count;
+                    if (!positionTotalPointsMap.containsKey(playerPosition)) {
+                        positionTotalSum = new BigDecimal(0);
+                        count = 0;
+                    } else {
+                        positionTotalSum = positionTotalPointsMap.get(playerPosition);
+                        count = positionCountMap.get(playerPosition);
+                    }
+                    positionTotalSum = positionTotalSum.add(points);
+                    count++;
+                    positionTotalPointsMap.put(playerPosition, positionTotalSum);
+                    positionCountMap.put(playerPosition, count);
                 }
+
+
 
             }
         }
