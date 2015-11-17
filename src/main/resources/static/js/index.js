@@ -26,6 +26,11 @@ function loadLeagueInfo()
 {
 
 
+   // $.ajax({
+  //      url: "players/load/league/" + $("#leagueInFocus").val() +"/",
+  //      type: "GET",
+  //      contentType: "application/json"
+ //   });
 
 
     $.ajax({
@@ -58,6 +63,7 @@ function loadLeagueAnalysis()
 
             // alert(data);
             createAvgPointAnalysisChart(data);
+            createPlayerPerformanceTable(data);
 
         },
         error: function (textStatus, errorThrown) {
@@ -129,12 +135,35 @@ function updateStandingsDataTable()
     standingsDomTable = document.getElementById('example');
 
 }
+
+var playerPerformanceDataTable,
+    playerPerformanceDomTable,
+    playerPerformanceHtmlTable = '<table id="player-performance-table" class="row-border"><tbody></tbody></table>';
+var playerPerformanceTable;
+function createPlayerPerformanceTable(data)
+{
+    playerPerformanceTable =  $('#player-performance-table').DataTable(
+        {
+
+            "processing": true,
+            "select": true,
+            "data": data.playerPerformanceList,
+            "columns":
+                [
+                    { "data": "player.name.full", "title":"Player" },
+                    { "data": "team.name", "title":"Team Name" },
+                    { "data": "points", "title": "Points" }
+
+                ],
+            bDestroy : true
+
+        } );
+
+}
 var transactionsDataTable,
     transactionsDomTable,
     transactionsHtmlTable = '<table id="league-transactions-table" class="row-border"><tbody></tbody></table>';
 var transactionsTable;
-
-
 
 function updateTransactionsDataTable()
 {

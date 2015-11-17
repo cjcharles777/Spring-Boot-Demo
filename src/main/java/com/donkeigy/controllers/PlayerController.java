@@ -32,4 +32,9 @@ public class PlayerController
         playerExample.setDisplay_position(position);
         return leaguePlayerService.getLeaguePlayersbyExample(playerExample);
     }
+    @RequestMapping(value="/load/league/{leagueKey}",method= RequestMethod.GET )
+    public void loadPlayers(@PathVariable("leagueKey") String leagueKey)
+    {
+        leaguePlayerService.loadPlayers(leagueKey);
+    }
 }
