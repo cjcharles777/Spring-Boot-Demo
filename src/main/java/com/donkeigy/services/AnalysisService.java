@@ -73,25 +73,8 @@ public class AnalysisService
                 positionAvgMap.put(positionAvg.getPosition(),tmpPositionAvg);
             }
             teamMap.put(team.getTeam_key(), team);
-            Map<String, BigDecimal> playerPerformanceMap = retrievePlayerPerformances(currentWeek, team);
-            for(String playerKey : playerPerformanceMap.keySet())
-            {
-                LeaguePlayer examplePlayer = new LeaguePlayer(leagueId);
-                examplePlayer.setPlayer_key(playerKey);
-                List<LeaguePlayer> players = leaguePlayerService.getLeaguePlayersbyExample(examplePlayer);
-                LeaguePlayer actualPlayer = null;
-                if(players.size() > 0)
-                {
-                    actualPlayer = players.get(0);
-                }
-                else
-                {
-                    System.out.println(playerKey);
-                }
-                PlayerPerformance playerPerformance = new PlayerPerformance(actualPlayer, playerPerformanceMap.get(playerKey), team);
-                playerPerformancesList.add(playerPerformance);
-            }
-
+            Map<String, PlayerPerformance> playerPerformanceMap = retrievePlayerPerformances(currentWeek, team, leagueId);
+            playerPerformancesList.addAll(playerPerformanceMap.values());
         }
         List<PositionAvg> leaguePositionAvgList = new LinkedList<>();
         leaguePositionAvgList.addAll(positionAvgMap.values());
@@ -276,9 +259,9 @@ public class AnalysisService
         return result;
     }
 
-    private Map<String, BigDecimal> retrievePlayerPerformances(int currentWeek, Team team)
+    private Map<String, PlayerPerformance> retrievePlayerPerformances(int currentWeek, Team team, String leagueId)
     {
-        Map<String, BigDecimal> result = new HashMap<>();
+        Map<String, PlayerPerformance> result = new HashMap<>();
         for (int i = 1; i < currentWeek; i++)
         {
             List<RosterStats> rosterStatsList = teamService.retrieveWeeklyRosterPoints(team.getTeam_key(),i);
@@ -288,11 +271,39 @@ public class AnalysisService
                 String playerPosition = rosterStats.getSelectedPosition();
                 if(!result.containsKey(rosterStats.getPlayerKey()))
                 {
-                    result.put(rosterStats.getPlayerKey(), new BigDecimal(0));
+
+                    LeaguePlayer examplePlayer = new LeaguePlayer(leagueId);
+                    examplePlayer.setPlayer_key(rosterStats.getPlayerKey());
+                    List<LeaguePlayer> players = leaguePlayerService.getLeaguePlayersbyExample(examplePlayer);
+                    LeaguePlayer actualPlayer = null;
+                    if(players.size() > 0)
+                    {
+                        actualPlayer = players.get(0);
+                    }
+                    else
+                    {
+                        System.out.println(rosterStats.getPlayerKey());
+                    }
+
+                    result.put(rosterStats.getPlayerKey(), new PlayerPerformance(actualPlayer, new BigDecimal(0),new BigDecimal(0),new BigDecimal(0), team));
                 }
-                BigDecimal totalPoints = result.get(rosterStats.getPlayerKey());
-                totalPoints = totalPoints.add(rosterStats.getPlayerPoints());
-                result.put(rosterStats.getPlayerKey(), totalPoints);
+                PlayerPerformance playerPerformance = result.get(rosterStats.getPlayerKey());
+                BigDecimal totalPoints = playerPerformance.getPoints();
+                totalPoints = totalPoints.add(points);
+                playerPerformance.setPoints(totalPoints);
+                if(playerPosition.equals("IR") || playerPosition.equals("BN"))
+                {
+                    BigDecimal nonEffectivePts =  playerPerformance.getNoneffectivePoints();
+                    nonEffectivePts = nonEffectivePts.add(points);
+                    playerPerformance.setNoneffectivePoints(nonEffectivePts);
+                }
+                else
+                {
+                    BigDecimal effectivePts = playerPerformance.getEffectivePoints();
+                    effectivePts = effectivePts.add(points);
+                    playerPerformance.setEffectivePoints(effectivePts);
+                }
+                result.put(rosterStats.getPlayerKey(), playerPerformance);
             }
         }
         return result;

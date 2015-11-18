@@ -152,7 +152,12 @@ function createPlayerPerformanceTable(data)
                 [
                     { "data": "player.name.full", "title":"Player" },
                     { "data": "team.name", "title":"Team Name" },
-                    { "data": "points", "title": "Points" }
+                    { "data": "points", "title": "Points" },
+                    { "data": "effectivePoints", "title": "Effective Points" },
+                    { "data": "noneffectivePoints", "title": "Non-Effective Points" },
+                    { "data": null, "title": "Effective Difference",  "render": function (row) {
+                        return row.effectivePoints - row.noneffectivePoints;
+                        } }
 
                 ],
             bDestroy : true
@@ -184,7 +189,7 @@ function updateTransactionsDataTable()
                     { "data": "timestamp", "title":"Time", "render" :  function ( data, type, full, meta ) {return timeConverter(data)}},
                     { "data": "type", "title": "Type" },
                     { "data": "status", "title":"Status" },
-                    { "data": "players", "title": "players",
+                    { "data": "players", "title": "Players",
                         "render": function ( data, type, full, meta ) {
                             var display = "";
                             if(data != null) {

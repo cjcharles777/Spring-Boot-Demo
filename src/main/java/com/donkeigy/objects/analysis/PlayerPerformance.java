@@ -12,13 +12,21 @@ public class PlayerPerformance
 {
     private LeaguePlayer player;
     private BigDecimal points;
+    private BigDecimal effectivePoints;
+    private BigDecimal noneffectivePoints;
     private Team team;
 
 
-    public PlayerPerformance(LeaguePlayer player, BigDecimal points, Team team) {
+    public PlayerPerformance(LeaguePlayer player, BigDecimal points, BigDecimal effectivePoints, BigDecimal noneffectivePoints, Team team) {
         this.player = player;
         this.points = points;
+        this.effectivePoints = effectivePoints;
+        this.noneffectivePoints = noneffectivePoints;
         this.team = team;
+    }
+
+    public PlayerPerformance(BigDecimal points) {
+        this.points = points;
     }
 
     public LeaguePlayer getPlayer() {
@@ -43,5 +51,21 @@ public class PlayerPerformance
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public BigDecimal getEffectivePoints() {
+        return effectivePoints;
+    }
+
+    public void setEffectivePoints(BigDecimal effectivePoints) {
+        this.effectivePoints = effectivePoints;
+    }
+
+    public BigDecimal getNoneffectivePoints() {
+        return noneffectivePoints;
+    }
+
+    public void setNoneffectivePoints(BigDecimal noneffectivePoints) {
+        this.noneffectivePoints = noneffectivePoints;
     }
 }
