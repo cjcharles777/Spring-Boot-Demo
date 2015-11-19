@@ -31,6 +31,21 @@ public class TeamController
 
         return teamService.retrieveLeagueTeams(leagueKey);
     }
+    @RequestMapping(value="/retrieve/league/{leagueKey}/self",method= RequestMethod.GET )
+    public Team retrieveMyLeagueTeam(@PathVariable("leagueKey") String leagueKey)
+    {
+
+        List<Team> leagueTeams =  teamService.retrieveLeagueTeams(leagueKey);
+        for(Team team : leagueTeams)
+        {
+            if(team.getIs_owned_by_current_login() != null && team.getIs_owned_by_current_login().equals("1"))
+            {
+                return team;
+            }
+
+        }
+        return null;
+    }
     @RequestMapping(value="/retrieve/roster/{teamKey}/{week}",method= RequestMethod.GET )
     public Roster retrieveTeamRoster(@PathVariable("teamKey") String teamKey, @PathVariable("week") Integer week)
     {
