@@ -282,26 +282,13 @@ function prepareTeamInfo(teamData, rosterData)
     var x;
     for(x in players)
     {
-        addPlayerToRoster(players[x]);
+        addPlayerToRoster("#team_detail_roster",players[x]);
     }
 
 
 }
 
-function addPlayerToRoster(player)
-{
-    if ($("#team_detail_roster tbody").length == 0)
-    {
-        $("#team_detail_roster").append("<tbody></tbody>");
-    }
-    // Append row to the table
-    $("#team_detail_roster tbody").append(
-        "<tr>" +
-        "<td><img src='" +player.headshot.url+ "'></td>" +
-        "<td>" + player.name.full + "</td>" +
-        "<td>" + player.display_position + "</td>" +
-        "</tr>" );
-}
+
 
 function retrieveTeamPoints (teamData)
 {

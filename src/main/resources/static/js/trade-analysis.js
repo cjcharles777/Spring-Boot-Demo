@@ -1,5 +1,5 @@
-var currentLeague ="";
-
+var currentLeague;
+var currentUserTeam;
 $(document).ready(function()
 {
 
@@ -31,6 +31,7 @@ function loadLeagueInfo()
             // alert(data);
             currentLeague = data;
             retrieveTeam();
+            retrieveOpponentsTeams();
         },
         error: function (textStatus, errorThrown) {
             alert("Error: " + textStatus + " " + errorThrown);
@@ -46,7 +47,28 @@ function retrieveTeam()
         success: function (data, created) {
 
             // alert(data);
+
             retrieveTeamRoster(data);
+
+        },
+        error: function (textStatus, errorThrown) {
+            alert("Error: " + textStatus + " " + errorThrown);
+        }
+    });
+}
+function retrieveOpponentsTeams()
+{
+    $.ajax({
+        url: "../team/retrieve/league/"+$("#leagueInFocus").val()+"/opp/",
+        type: "GET",
+        contentType: "application/json",
+        success: function (data, created) {
+
+
+
+            populateSelectWithTeamData("#comparison_team",data);
+            retrieveTeamRoster(data[0]);
+
         },
         error: function (textStatus, errorThrown) {
             alert("Error: " + textStatus + " " + errorThrown);
@@ -60,21 +82,41 @@ function retrieveTeamRoster(teamData)
         type: "GET",
         contentType: "application/json",
         success: function (data, created) {
+            prepareTeamInfo(teamData, data)
 
-            //alert(data);
-            //prepareTeamInfo(teamData, rosterData)
-            var select = $("#playersOnTeam"), options = '';
-            select.empty();
-            var players = data.players.player;
-            for(var i=0;i < players.length; i++)
-            {
-                options += "<option value='"+players[i].player_key +"'>"+ players[i].name.full + " - "+players[i].display_position +"</option>";
-            }
-
-            select.append(options);
         },
         error: function (textStatus, errorThrown) {
             alert("Error: " + textStatus + " " + errorThrown);
         }
     });
+
+
+}
+
+function prepareTeamInfo(teamData, rosterData)
+{
+    // TODO: add JQuery Magic
+    var divId;
+    var players = rosterData.players.player;
+
+    if(teamData.is_owned_by_current_login == "1")
+    {
+        divId = "#users_team_roster";
+    }
+    else
+    {
+        divId = "#comparison_team_roster";
+    }
+
+    $(divId+'.team_detail_name').html(teamData.name);
+
+
+    $(divId+" .roster tbody").remove();
+    var x;
+    for(x in players)
+    {
+        addPlayerToRoster(divId,players[x]);
+    }
+
+
 }

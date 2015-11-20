@@ -17,6 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.min.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script src="/js/const.js"></script>
+    <script src="/js/common-core.js"></script>
     <script src="/js/index.js"></script>
     <script id="template" type="x-tmpl-mustache">
       {{#matchups.matchup}}

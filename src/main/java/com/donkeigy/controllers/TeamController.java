@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -45,6 +46,22 @@ public class TeamController
 
         }
         return null;
+    }
+    @RequestMapping(value="/retrieve/league/{leagueKey}/opp",method= RequestMethod.GET )
+    public List<Team> retrieveOpponentLeagueTeam(@PathVariable("leagueKey") String leagueKey)
+    {
+
+        List<Team> leagueTeams =  teamService.retrieveLeagueTeams(leagueKey);
+        List<Team> result = new LinkedList<>();
+        for(Team team : leagueTeams)
+        {
+            if(!(team.getIs_owned_by_current_login() != null && team.getIs_owned_by_current_login().equals("1")))
+            {
+                result.add(team);
+            }
+
+        }
+        return result;
     }
     @RequestMapping(value="/retrieve/roster/{teamKey}/{week}",method= RequestMethod.GET )
     public Roster retrieveTeamRoster(@PathVariable("teamKey") String teamKey, @PathVariable("week") Integer week)
