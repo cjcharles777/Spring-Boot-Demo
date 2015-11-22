@@ -105,14 +105,14 @@ function updateStandingsDataTable()
             },
             "columns":
                 [
-                    { "data": "standings.rank", "title":"Rank" },
+                    { "data": "standings.rank"* 1, "title":"Rank" },
                     { "data": "name", "title":"Team Name" },
-                    { "data": "standings.outcome_totals.wins", "title": "Wins" },
-                    { "data": "standings.outcome_totals.losses", "title": "Losses" },
-                    { "data": "standings.outcome_totals.ties", "title":"Ties" },
-                    { "data": "standings.outcome_totals.percentage", "title":"Percentage" },
-                    { "data": "standings.points_for", "title":"Points For" },
-                    { "data": "standings.points_against", "title":"Points Against" }
+                    { "data": "standings.outcome_totals.wins" * 1, "title": "Wins" },
+                    { "data": "standings.outcome_totals.losses" * 1, "title": "Losses" },
+                    { "data": "standings.outcome_totals.ties" * 1, "title":"Ties" },
+                    { "data": "standings.outcome_totals.percentage" * 1, "title":"Percentage" },
+                    { "data": "standings.points_for" * 1, "title":"Points For" },
+                    { "data": "standings.points_against"* 1, "title":"Points Against"}
                 ],
             bDestroy : true
 
