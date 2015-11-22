@@ -26,6 +26,11 @@ function loadLeagueInfo()
 {
 
 
+   // $.ajax({
+  //      url: "players/load/league/" + $("#leagueInFocus").val() +"/",
+  //      type: "GET",
+  //      contentType: "application/json"
+ //   });
 
 
     $.ajax({
@@ -58,6 +63,7 @@ function loadLeagueAnalysis()
 
             // alert(data);
             createAvgPointAnalysisChart(data);
+            createPlayerPerformanceTable(data);
 
         },
         error: function (textStatus, errorThrown) {
@@ -129,12 +135,40 @@ function updateStandingsDataTable()
     standingsDomTable = document.getElementById('example');
 
 }
+
+var playerPerformanceDataTable,
+    playerPerformanceDomTable,
+    playerPerformanceHtmlTable = '<table id="player-performance-table" class="row-border"><tbody></tbody></table>';
+var playerPerformanceTable;
+function createPlayerPerformanceTable(data)
+{
+    playerPerformanceTable =  $('#player-performance-table').DataTable(
+        {
+
+            "processing": true,
+            "select": true,
+            "data": data.playerPerformanceList,
+            "columns":
+                [
+                    { "data": "player.name.full", "title":"Player" },
+                    { "data": "team.name", "title":"Team Name" },
+                    { "data": "points", "title": "Points" },
+                    { "data": "effectivePoints", "title": "Effective Points" },
+                    { "data": "noneffectivePoints", "title": "Non-Effective Points" },
+                    { "data": null, "title": "Effective Difference",  "render": function (row) {
+                        return row.effectivePoints - row.noneffectivePoints;
+                        } }
+
+                ],
+            bDestroy : true
+
+        } );
+
+}
 var transactionsDataTable,
     transactionsDomTable,
     transactionsHtmlTable = '<table id="league-transactions-table" class="row-border"><tbody></tbody></table>';
 var transactionsTable;
-
-
 
 function updateTransactionsDataTable()
 {
@@ -155,7 +189,7 @@ function updateTransactionsDataTable()
                     { "data": "timestamp", "title":"Time", "render" :  function ( data, type, full, meta ) {return timeConverter(data)}},
                     { "data": "type", "title": "Type" },
                     { "data": "status", "title":"Status" },
-                    { "data": "players", "title": "players",
+                    { "data": "players", "title": "Players",
                         "render": function ( data, type, full, meta ) {
                             var display = "";
                             if(data != null) {
@@ -248,26 +282,13 @@ function prepareTeamInfo(teamData, rosterData)
     var x;
     for(x in players)
     {
-        addPlayerToRoster(players[x]);
+        addPlayerToRoster("#team_detail_roster",players[x]);
     }
 
 
 }
 
-function addPlayerToRoster(player)
-{
-    if ($("#team_detail_roster tbody").length == 0)
-    {
-        $("#team_detail_roster").append("<tbody></tbody>");
-    }
-    // Append row to the table
-    $("#team_detail_roster tbody").append(
-        "<tr>" +
-        "<td><img src='" +player.headshot.url+ "'></td>" +
-        "<td>" + player.name.full + "</td>" +
-        "<td>" + player.display_position + "</td>" +
-        "</tr>" );
-}
+
 
 function retrieveTeamPoints (teamData)
 {

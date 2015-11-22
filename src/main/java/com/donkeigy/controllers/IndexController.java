@@ -2,6 +2,7 @@ package com.donkeigy.controllers;
 
 import com.donkeigy.dao.LeaguePlayersDAO;
 import com.donkeigy.objects.hibernate.LeaguePlayer;
+import com.donkeigy.services.LeaguePlayerService;
 import com.donkeigy.services.YahooDataService;
 import com.yahoo.objects.league.League;
 import com.yahoo.objects.players.Player;
@@ -30,6 +31,8 @@ public class IndexController
     @Autowired
     YahooDataService yahooDataService;
     @Autowired
+    LeaguePlayerService leaguePlayerService;
+    @Autowired
     LeaguePlayersDAO leaguePlayersDAO;
     private List<League> leagues =new ArrayList<League>();
 
@@ -44,6 +47,7 @@ public class IndexController
             LeagueService leagueService = (LeagueService)factory.getService(ServiceType.LEAGUE);
 
             leagues = leagueService.getUserLeagues("nfl");
+
 
 
 

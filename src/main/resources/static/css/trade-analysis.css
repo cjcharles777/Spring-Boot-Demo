@@ -1,0 +1,12 @@
+div#users_team_roster
+{
+    width: 50%;
+    float:left;
+    overflow:hidden;
+}
+div#league_selector
+{
+    width: 50%;
+    float:left;
+    overflow:hidden;
+}

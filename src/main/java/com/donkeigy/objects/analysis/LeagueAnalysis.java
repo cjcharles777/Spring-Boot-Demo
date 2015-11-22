@@ -12,6 +12,7 @@ public class LeagueAnalysis
     private List<TeamPositionAvg> teamPositionAvgList;
     private String[] availablePositonsArray;
     private List<TeamPositionMovement> TeamPositionMovementList;
+    private List<PlayerPerformance> playerPerformanceList;
 
     public List<PositionAvg> getPositionAvgList() {
         return positionAvgList;
@@ -51,5 +52,13 @@ public class LeagueAnalysis
 
     public void setTeamPositionMovementList(List<TeamPositionMovement> teamPositionMovementList) {
         TeamPositionMovementList = teamPositionMovementList;
+    }
+
+    public List<PlayerPerformance> getPlayerPerformanceList() {
+        return playerPerformanceList;
+    }
+
+    public void setPlayerPerformanceList(List<PlayerPerformance> playerPerformanceList) {
+        this.playerPerformanceList = playerPerformanceList;
     }
 }

@@ -1,6 +1,7 @@
 package com.donkeigy.services;
 
 import com.donkeigy.objects.analysis.*;
+import com.donkeigy.objects.hibernate.LeaguePlayer;
 import com.yahoo.objects.league.League;
 import com.yahoo.objects.league.LeagueRosterPosition;
 import com.yahoo.objects.league.LeagueSettings;
@@ -9,6 +10,7 @@ import com.yahoo.objects.league.transactions.TransactionData;
 import com.yahoo.objects.league.transactions.TransactionPlayer;
 import com.yahoo.objects.team.RosterStats;
 import com.yahoo.objects.team.Team;
+import com.yahoo.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,8 @@ public class AnalysisService
     LeagueService leagueService;
     @Autowired
     TeamService teamService;
+    @Autowired
+    LeaguePlayerService leaguePlayerService;
 
 
     public LeagueAnalysis retrieveLeagueAnalysis (String leagueId)
@@ -38,6 +42,7 @@ public class AnalysisService
         League league = leagueService.retrieveLeague(leagueId);
         List<Team> teams = teamService.retrieveLeagueTeams(leagueId);
         Map<String, Team> teamMap = new HashMap<>();
+        List<PlayerPerformance> playerPerformancesList = new LinkedList<>();
         LeagueSettings leagueSettings = leagueService.retrieveLeagueSettings(leagueId);
         result.setAvailablePositonsArray(createPositionsArray(leagueSettings.getRoster_positions().getRoster_position()));
         List<TeamPositionAvg> teamPositionAvgList = new LinkedList<>();
@@ -68,12 +73,14 @@ public class AnalysisService
                 positionAvgMap.put(positionAvg.getPosition(),tmpPositionAvg);
             }
             teamMap.put(team.getTeam_key(), team);
+            Map<String, PlayerPerformance> playerPerformanceMap = retrievePlayerPerformances(currentWeek, team, leagueId);
+            playerPerformancesList.addAll(playerPerformanceMap.values());
         }
         List<PositionAvg> leaguePositionAvgList = new LinkedList<>();
         leaguePositionAvgList.addAll(positionAvgMap.values());
         result.setPositionAvgList(leaguePositionAvgList);
         result.setTeamPositionAvgList(teamPositionAvgList);
-
+        result.setPlayerPerformanceList(playerPerformancesList);
 
         List<TeamPositionMovement> teamPositionMovementList = analyzeLeagueTransactions(leagueId, teamMap);
         result.setTeamPositionMovementList(teamPositionMovementList);
@@ -100,6 +107,7 @@ public class AnalysisService
         List<PositionMovements> resultLeaugePositionMovementList = new LinkedList<>();
         resultLeaugePositionMovementList.addAll(positionMovementsMap.values());
         result.setPositionMovementsList(resultLeaugePositionMovementList);
+
 
         return result;
      }
@@ -201,7 +209,8 @@ public class AnalysisService
 
     }
 
-    private TeamPositionAvg getTeamPositionAvg(int currentWeek, Team team) {
+    private TeamPositionAvg getTeamPositionAvg(int currentWeek, Team team)
+    {
         TeamPositionAvg result = new TeamPositionAvg(team);
         Map<String, BigDecimal> positionTotalPointsMap = new HashMap<String, BigDecimal>();
         Map<String, Integer> positionCountMap = new HashMap<String, Integer>();
@@ -247,6 +256,56 @@ public class AnalysisService
             positionAvgs.add(positionAvg);
         }
         result.setPositionAvgList(positionAvgs);
+        return result;
+    }
+
+    private Map<String, PlayerPerformance> retrievePlayerPerformances(int currentWeek, Team team, String leagueId)
+    {
+        Map<String, PlayerPerformance> result = new HashMap<>();
+        for (int i = 1; i < currentWeek; i++)
+        {
+            List<RosterStats> rosterStatsList = teamService.retrieveWeeklyRosterPoints(team.getTeam_key(),i);
+            for (RosterStats rosterStats : rosterStatsList)
+            {
+                BigDecimal points = rosterStats.getPlayerPoints();
+                String playerPosition = rosterStats.getSelectedPosition();
+                if(!result.containsKey(rosterStats.getPlayerKey()))
+                {
+
+                    LeaguePlayer examplePlayer = new LeaguePlayer(leagueId);
+                    examplePlayer.setPlayer_key(rosterStats.getPlayerKey());
+                    List<LeaguePlayer> players = leaguePlayerService.getLeaguePlayersbyExample(examplePlayer);
+                    LeaguePlayer actualPlayer = null;
+                    if(players.size() > 0)
+                    {
+                        actualPlayer = players.get(0);
+                    }
+                    else
+                    {
+                        System.out.println(rosterStats.getPlayerKey());
+                    }
+
+                    result.put(rosterStats.getPlayerKey(), new PlayerPerformance(actualPlayer, new BigDecimal(0),new BigDecimal(0),new BigDecimal(0), team));
+                }
+                PlayerPerformance playerPerformance = result.get(rosterStats.getPlayerKey());
+                BigDecimal totalPoints = playerPerformance.getPoints();
+                totalPoints = totalPoints.add(points);
+                playerPerformance.setPoints(totalPoints);
+                if(playerPosition.equals("IR") || playerPosition.equals("BN"))
+                {
+                    BigDecimal nonEffectivePts =  playerPerformance.getNoneffectivePoints();
+                    nonEffectivePts = nonEffectivePts.add(points);
+                    playerPerformance.setNoneffectivePoints(nonEffectivePts);
+                }
+                else
+                {
+                    BigDecimal effectivePts = playerPerformance.getEffectivePoints();
+                    effectivePts = effectivePts.add(points);
+                    playerPerformance.setEffectivePoints(effectivePts);
+                }
+                result.put(rosterStats.getPlayerKey(), playerPerformance);
+            }
+        }
         return result;
     }
 
