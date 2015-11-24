@@ -67,7 +67,7 @@ function retrieveOpponentsTeams()
 
 
             populateSelectWithTeamData("#comparison_team",data);
-            retrieveTeamRoster(data[0]);
+            //retrieveTeamRoster(data[0]);
 
         },
         error: function (textStatus, errorThrown) {
@@ -82,8 +82,8 @@ function retrieveTeamRoster(teamData)
         type: "GET",
         contentType: "application/json",
         success: function (data, created) {
-            prepareTeamInfo(teamData, data)
-
+            prepareTeamInfo(teamData, data);
+            retrieveComparisonPlayers(data.players.player[0].player_key);
         },
         error: function (textStatus, errorThrown) {
             alert("Error: " + textStatus + " " + errorThrown);
@@ -91,6 +91,21 @@ function retrieveTeamRoster(teamData)
     });
 
 
+}
+function retrieveComparisonPlayers(playerKey)
+{
+    $.ajax({
+        url: "../data/players/comparable/"+$("#leagueInFocus").val()+"/"+playerKey+"/",
+        type: "GET",
+        contentType: "application/json",
+        success: function (data, created) {
+            prepareComparableInfo(data)
+
+        },
+        error: function (textStatus, errorThrown) {
+            alert("Error: " + textStatus + " " + errorThrown);
+        }
+    });
 }
 
 function prepareTeamInfo(teamData, rosterData)
@@ -118,5 +133,21 @@ function prepareTeamInfo(teamData, rosterData)
         addPlayerToRoster(divId,players[x]);
     }
 
+}
+function prepareComparableInfo(rosterData)
+{
+    // TODO: add JQuery Magic
+    var divId = "#comparison_team_roster";
+    var players = rosterData;
+
+   // $(divId+'.team_detail_name').html(teamData.name);
+
+
+    $(divId+" .roster tbody").remove();
+    var x;
+    for(x in players)
+    {
+        addPlayerToRosterWithCurrPos(divId,players[x].player, players[x].currentPosition, players[x].team);
+    }
 
 }

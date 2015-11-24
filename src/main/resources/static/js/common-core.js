@@ -13,6 +13,22 @@ function addPlayerToRoster(id, player)
         "</tr>"
     );
 }
+function addPlayerToRosterWithCurrPos(id, player, currentPosition, team)
+{
+    if ($(id +" .roster tbody").length == 0)
+    {
+        $(id + " .roster").append("<tbody></tbody>");
+    }
+    // Append row to the table
+    $(id +" .roster tbody").append(
+        "<tr>" +
+        "<td><img src='" +player.headshot.url+ "'></td>" +
+        "<td>" + player.name.full + "</td>" +
+        "<td>" + currentPosition + "</td>" +
+        "<td>" + team.name + "</td>" +
+        "</tr>"
+    );
+}
 function populateSelectWithTeamData(id, data)
 {
     var select = $(id), options = '';

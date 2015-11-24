@@ -1,5 +1,6 @@
 package com.donkeigy.controllers;
 
+import com.donkeigy.objects.analysis.ComparablePlayer;
 import com.donkeigy.objects.analysis.LeagueAnalysis;
 import com.donkeigy.services.AnalysisService;
 import com.donkeigy.services.LeaguePlayerService;
@@ -73,6 +74,10 @@ public class DataController
 
         return leagueService.retrieveWeeklyScoreBoard(leagueKey, week);
     }
-
+    @RequestMapping(value="/players/comparable/{leagueKey}/{playerid}",method= RequestMethod.GET )
+    public List<ComparablePlayer> retrieveComprableLeaugePlayers(@PathVariable("leagueKey") String leagueKey, @PathVariable("playerid") String playerid)
+    {
+        return analysisService.retrieveComparablePlayersinLeauge(leagueKey, playerid);
+    }
 
 }
