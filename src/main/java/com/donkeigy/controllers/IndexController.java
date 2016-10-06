@@ -48,7 +48,7 @@ public class IndexController
 
             leagues = leagueService.getUserLeagues("nfl");
 
-
+            leaguePlayerService.loadPlayers(leagues.get(0).getLeague_key());
 
 
             model.addAttribute("leagues", leagues);
