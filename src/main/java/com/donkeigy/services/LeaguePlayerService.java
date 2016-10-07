@@ -45,6 +45,23 @@ public class LeaguePlayerService extends BaseService
     {
         return leaguePlayersDAO.getLeaguePlayers(example);
     }
+    public LeaguePlayer getLeaguePlayersbyLeagueIdandPlayerId(String leagueId, String playerKey)
+    {
+        LeaguePlayer examplePlayer = new LeaguePlayer(leagueId);
+        examplePlayer.setPlayer_key(playerKey);
+        List<LeaguePlayer> players = getLeaguePlayersbyExample(examplePlayer);
+        LeaguePlayer actualPlayer = null;
+        if(players.size() > 0)
+        {
+            actualPlayer = players.get(0);
+        }
+        else
+        {
+            System.out.println(playerKey);
+        }
+        return actualPlayer;
+
+    }
 
     @Override
     public void initService() {

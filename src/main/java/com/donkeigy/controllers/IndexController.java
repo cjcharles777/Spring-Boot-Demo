@@ -47,6 +47,8 @@ public class IndexController
             LeagueService leagueService = (LeagueService)factory.getService(ServiceType.LEAGUE);
 
             leagues = leagueService.getUserLeagues("nfl");
+
+            leaguePlayerService.loadPlayers(leagues.get(0).getLeague_key());
             League initLeague = leagues.get(0);
  //           leaguePlayerService.loadPlayers(initLeague.getLeague_key());
 

@@ -112,6 +112,32 @@ public class AnalysisService
         return result;
      }
 
+    public List <ComparablePlayer> retrieveComparablePlayersinLeauge (String leagueId, String playerId)
+    {
+        League league = leagueService.retrieveLeague(leagueId);
+        List <Team> teams = teamService.retrieveLeagueTeams(leagueId);
+        LeaguePlayer comparedPlayer = leaguePlayerService.getLeaguePlayersbyLeagueIdandPlayerId(leagueId, playerId);
+        int currentWeek = Integer.parseInt(league.getCurrent_week());
+        List<ComparablePlayer> results = new LinkedList<>();
+        for(Team team : teams)
+        {
+
+            List<RosterStats> rosterStatsList = teamService.retrieveWeeklyRosterPoints(team.getTeam_key(), currentWeek);
+            for (RosterStats rosterStats : rosterStatsList)
+            {
+                String playerPosition = rosterStats.getSelectedPosition();;
+                LeaguePlayer player = leaguePlayerService.getLeaguePlayersbyLeagueIdandPlayerId(leagueId, rosterStats.getPlayerKey());
+                if(player.getDisplay_position().equals(comparedPlayer.getDisplay_position()))
+                {
+                    results.add(new ComparablePlayer(player, team, playerPosition));
+                }
+
+
+
+            }
+        }
+        return results;
+    }
     private  List<TeamPositionMovement> analyzeLeagueTransactions(String leagueId, Map<String, Team> teamMap)
     {
         List<TeamPositionMovement> result = new LinkedList<>();

@@ -152,6 +152,8 @@ function createPlayerPerformanceTable(data)
             "columns":
                 [
                     { "data": "player.name.full", "title":"Player" },
+                    { "data": "player.display_position", "title":"Position" },
+                    { "data": "player.editorial_team_abbr", "title":"Team" },
                     { "data": "team.name", "title":"Team Name" },
                     { "data": "points", "title": "Points" },
                     { "data": "effectivePoints", "title": "Effective Points" },
