@@ -63,6 +63,7 @@ function loadLeagueAnalysis()
 
             // alert(data);
             createAvgPointAnalysisChart(data);
+            createTotalPointAnalysisChart(data);
             createPlayerPerformanceTable(data);
 
         },
@@ -463,6 +464,26 @@ function createAvgPointAnalysisChart(data)
     var chart = new google.visualization.ComboChart(document.getElementById('avg_points_chart_div'));
     google.setOnLoadCallback(drawChart(gAvgData, gOptions, chart));
 }
+function createTotalPointAnalysisChart(data)
+{
+    var gAvgData = google.visualization.arrayToDataTable(prepareTotalPointAnalysisTable(data));
+
+
+    var numTeams = data.teamPositionAvgList.length ; // must be using Location
+    var seriesArray = new Array (numTeams);
+    seriesArray[numTeams] =  {type: 'line'};
+    var gOptions = {
+        title : 'Total Point Production by Position',
+        height: 500,
+        width: 900,
+        vAxis: {title: 'Total Points'},
+        hAxis: {title: 'Positions'},
+        seriesType: 'bars',
+        series: seriesArray
+    };
+    var chart = new google.visualization.ComboChart(document.getElementById('total_points_chart_div'));
+    google.setOnLoadCallback(drawChart(gAvgData, gOptions, chart));
+}
 function prepareAvgPointAnalysisTable(data)
 {
     var positions = data.availablePositonsArray;
@@ -500,7 +521,43 @@ function prepareAvgPointAnalysisTable(data)
     }
     return finalArr;
 }
+function prepareTotalPointAnalysisTable(data)
+{
+    var positions = data.availablePositonsArray;
+    var teamData = data.teamPositionAvgList;
+    var leagueData = data.positionAvgList;
+    removeA(positions, 'IR');
+    removeA(positions, 'BN');
 
+    var finalArr = [];
+    var headerArr = [];
+    headerArr.push("Position");
+    for (x in teamData)
+    {
+        headerArr.push(teamData[x].team.name);
+    }
+    headerArr.push("League");
+    finalArr.push(headerArr);
+    for (y in positions)
+    {
+
+        var position = positions[y];
+        var tempPosArr = [position];
+        for(z in teamData)
+        {
+            var matches = teamData[z].positionAvgList.filter(function(val, index, array) {
+                return val.position == position;
+            });
+            tempPosArr.push(matches[0].total);
+        }
+        var leaugeMatches = leagueData.filter(function(val, index, array) {
+            return val.position == position;
+        });
+        tempPosArr.push(leaugeMatches[0].avg);
+        finalArr.push(tempPosArr);
+    }
+    return finalArr;
+}
 function removeA(arr)
 {
     var what, a = arguments, L = a.length, ax;
