@@ -14,41 +14,20 @@ $(document).ready(function()
 });
 
 google.load("visualization", "1", {packages:["corechart"]});
-
 function loadLeagueData()
 {
-    loadLeagueInfo();
+    loadLeagueInfo(function(data)
+    {
+        currentLeague = data;
+        loadLeagueScoreboard();
+        updateStandingsDataTable();
+    });
     updateTransactionsDataTable();
     loadLeagueAnalysis();
+
 }
 
-function loadLeagueInfo()
-{
 
-
-   // $.ajax({
-  //      url: "players/load/league/" + $("#leagueInFocus").val() +"/",
-  //      type: "GET",
-  //      contentType: "application/json"
- //   });
-
-
-    $.ajax({
-        url: "data/league/" + $("#leagueInFocus").val() +"/",
-        type: "GET",
-        contentType: "application/json",
-        success: function (data, created) {
-
-           // alert(data);
-            currentLeague = data;
-            loadLeagueScoreboard();
-            updateStandingsDataTable();
-        },
-        error: function (textStatus, errorThrown) {
-            alert("Error: " + textStatus + " " + errorThrown);
-        }
-    });
-}
 function loadLeagueAnalysis()
 {
 

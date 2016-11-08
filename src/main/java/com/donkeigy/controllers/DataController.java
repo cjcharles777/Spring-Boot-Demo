@@ -6,6 +6,8 @@ import com.donkeigy.services.AnalysisService;
 import com.donkeigy.services.LeaguePlayerService;
 import com.donkeigy.services.LeagueService;
 import com.yahoo.objects.league.League;
+import com.yahoo.objects.league.LeagueRosterPosition;
+import com.yahoo.objects.league.LeagueSettings;
 import com.yahoo.objects.league.transactions.LeagueScoreboard;
 import com.yahoo.objects.league.transactions.LeagueTransaction;
 import com.yahoo.objects.team.Team;
@@ -68,6 +70,13 @@ public class DataController
 
         return leagueService.retrieveLeague(leagueKey);
     }
+    @RequestMapping(value="/league/{leagueKey}/roster-positions",method= RequestMethod.GET )
+    public List<LeagueRosterPosition> retrieveLeagueRosterPositions(@PathVariable("leagueKey") String leagueKey)
+    {
+
+        return leagueService.retrieveLeagueRosterPositions(leagueKey);
+    }
+
     @RequestMapping(value="/league/scoreboard/{leagueKey}/{week}",method= RequestMethod.GET )
     public LeagueScoreboard retrieveLeagueScoreboard(@PathVariable("leagueKey") String leagueKey, @PathVariable("week") Integer week)
     {

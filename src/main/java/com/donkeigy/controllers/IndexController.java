@@ -25,7 +25,7 @@ import java.util.List;
  * Created by cedric on 8/25/15.
  */
 @Controller
-public class IndexController
+public class IndexController extends BaseController
 {
 
     @Autowired
@@ -41,27 +41,8 @@ public class IndexController
     public String loadHomePage(Model model)
     {
 
-        if(yahooDataService.isConnected())
-        {
-            YahooServiceFactory factory = yahooDataService.getFactory();
-            LeagueService leagueService = (LeagueService)factory.getService(ServiceType.LEAGUE);
+        return super.loadHomePage(model, "index");
 
-            leagues = leagueService.getUserLeagues("nfl");
-
-            leaguePlayerService.loadPlayers(leagues.get(0).getLeague_key());
-
-
-
-            model.addAttribute("leagues", leagues);
-
-            return "index";
-        }
-        else
-        {
-            model.addAttribute("oAuthUrl", yahooDataService.retrieveAuthUrl());
-            return "oauth-verify";
-        }
-        //yahooDataService.init();
 
 
     }

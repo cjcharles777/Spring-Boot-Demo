@@ -1,6 +1,7 @@
 package com.donkeigy.services;
 
 import com.yahoo.objects.league.League;
+import com.yahoo.objects.league.LeagueRosterPosition;
 import com.yahoo.objects.league.LeagueSettings;
 import com.yahoo.objects.league.transactions.LeagueScoreboard;
 import com.yahoo.objects.league.transactions.LeagueTransaction;
@@ -41,11 +42,16 @@ public class LeagueService  extends BaseService
         return leagueService.getWeeklyScoreBoard(leagueId, week.intValue());
     }
 
-    LeagueSettings retrieveLeagueSettings(String leagueId)
+    public LeagueSettings retrieveLeagueSettings(String leagueId)
     {
         return leagueService.getLeagueSettings(leagueId);
     }
 
+    public List<LeagueRosterPosition> retrieveLeagueRosterPositions (String leagueId)
+    {
+        LeagueSettings settings = retrieveLeagueSettings(leagueId);
+        return settings.getRoster_positions().getRoster_position();
+    }
 
     @Override
     public void initService()
