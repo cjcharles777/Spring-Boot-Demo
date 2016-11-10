@@ -8,6 +8,7 @@ import com.yahoo.objects.league.LeagueSettings;
 import com.yahoo.objects.league.transactions.LeagueTransaction;
 import com.yahoo.objects.league.transactions.TransactionData;
 import com.yahoo.objects.league.transactions.TransactionPlayer;
+import com.yahoo.objects.players.Player;
 import com.yahoo.objects.team.RosterStats;
 import com.yahoo.objects.team.Team;
 import com.yahoo.services.PlayerService;
@@ -314,6 +315,71 @@ public class AnalysisService
                     result.put(rosterStats.getPlayerKey(), new PlayerPerformance(actualPlayer, new BigDecimal(0),new BigDecimal(0),new BigDecimal(0), team));
                 }
                 PlayerPerformance playerPerformance = result.get(rosterStats.getPlayerKey());
+                BigDecimal totalPoints = playerPerformance.getPoints();
+                totalPoints = totalPoints.add(points);
+                playerPerformance.setPoints(totalPoints);
+                if(playerPosition.equals("IR") || playerPosition.equals("BN"))
+                {
+                    BigDecimal nonEffectivePts =  playerPerformance.getNoneffectivePoints();
+                    nonEffectivePts = nonEffectivePts.add(points);
+                    playerPerformance.setNoneffectivePoints(nonEffectivePts);
+                }
+                else
+                {
+                    BigDecimal effectivePts = playerPerformance.getEffectivePoints();
+                    effectivePts = effectivePts.add(points);
+                    playerPerformance.setEffectivePoints(effectivePts);
+                }
+                result.put(rosterStats.getPlayerKey(), playerPerformance);
+            }
+        }
+        return result;
+    }
+
+    private List<TeamPositionComparableWeek> retrieveTeamPositionComparableWeekComparison(int currentWeek, Team team1, Team team2, String position, String leagueId)
+    {
+        Map<String, TeamPositionComparableWeek> result = new HashMap<>();
+        Map<String, LeaguePlayer> playerMap = new HashMap<>();
+        for (int i = 1; i < currentWeek; i++)
+        {
+            List<RosterStats> rosterStatsList = teamService.retrieveWeeklyRosterPoints(team1.getTeam_key(),i);
+            rosterStatsList.addAll(teamService.retrieveWeeklyRosterPoints(team2.getTeam_key(),i));
+            TeamPositionComparableWeek teamPositionComparableWeek = new TeamPositionComparableWeek();
+            teamPositionComparableWeek.setWeek(i);
+
+            for (RosterStats rosterStats : rosterStatsList)
+            {
+
+                LeaguePlayer actualPlayer = null;
+                String playerPosition = rosterStats.getSelectedPosition();
+                if(!playerMap.containsKey(rosterStats.getPlayerKey()))
+                {
+
+                    LeaguePlayer examplePlayer = new LeaguePlayer(leagueId);
+                    examplePlayer.setPlayer_key(rosterStats.getPlayerKey());
+                    List<LeaguePlayer> players = leaguePlayerService.getLeaguePlayersbyExample(examplePlayer);
+                    if(players.size() > 0)
+                    {
+                        actualPlayer = players.get(0);
+                    }
+                    else
+                    {
+                        System.out.println(rosterStats.getPlayerKey());
+                    }
+
+                    playerMap.put(rosterStats.getPlayerKey(), actualPlayer);
+                }
+                else
+                {
+                    actualPlayer = playerMap.get(rosterStats.getPlayerKey());
+                }
+                if(playerPosition.equals(position))
+                {
+                    BigDecimal points = rosterStats.getPlayerPoints();
+
+                }
+                //TODO: Figure out what do you want.
+                PlayerPerformance playerPerformance = null;
                 BigDecimal totalPoints = playerPerformance.getPoints();
                 totalPoints = totalPoints.add(points);
                 playerPerformance.setPoints(totalPoints);
