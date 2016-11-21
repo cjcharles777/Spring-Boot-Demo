@@ -335,7 +335,7 @@ public class AnalysisService
         }
         return result;
     }
-
+/**
     private List<TeamPositionComparableWeek> retrieveTeamPositionComparableWeekComparison(int currentWeek, Team team1, Team team2, String position, String leagueId)
     {
         Map<String, TeamPositionComparableWeek> result = new HashMap<>();
@@ -400,7 +400,7 @@ public class AnalysisService
         }
         return result;
     }
-
+**/
     private String[] createPositionsArray(List<LeagueRosterPosition> roster_position)
     {
         String[] result = new String[roster_position.size()];
